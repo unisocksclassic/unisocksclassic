@@ -33,7 +33,7 @@ const SelectMenu = styled(Select)`
 `
 
 const options = Object.keys(TOKEN_SYMBOLS)
-  .filter(s => s !== 'SOCKS')
+  .filter(s => s !== 'SOCKSCLASSIC')
   .map(s => ({ value: s, label: s }))
 
 export default function SelectToken({ selectedTokenSymbol, setSelectedTokenSymbol }) {

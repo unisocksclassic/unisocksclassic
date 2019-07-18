@@ -12,6 +12,7 @@ export default function Web3ReactManager({ children }) {
     if (!active) {
       if (window.ethereum) {
         try {
+          window.ethereum.enable()
           const library = new ethers.providers.Web3Provider(window.ethereum)
           library.listAccounts().then(accounts => {
             if (accounts.length >= 1) {

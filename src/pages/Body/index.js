@@ -13,7 +13,7 @@ function Header({ ready, dollarPrice }) {
   return (
     <HeaderFrame>
       <Status ready={ready} account={account} />
-      <Title>unisocks token (SOCKS)</Title>
+      <Title>unisocks classic token (SOCKSCLASSIC)</Title>
       <CurrentPrice>{dollarPrice && `$${amountFormatter(dollarPrice, 18, 2)} USD`}</CurrentPrice>
       <Tagline>dynamically priced socks</Tagline>
     </HeaderFrame>
@@ -48,7 +48,7 @@ export default function Body({
       <Gallery />
       <div>
         <Intro>
-          purchasing a <b>SOCKS</b> entitles you to 1{' '}
+          purchasing a <b>SOCKSCLASSIC</b> entitles you to 1{' '}
           <i>
             <b>real</b>
           </i>{' '}
@@ -58,7 +58,7 @@ export default function Body({
         <MarketData>
           {balanceSOCKS > 0 ? (
             <SockCount>
-              You own {balanceSOCKS && `${amountFormatter(balanceSOCKS, 18, 0)}`} SOCKS&nbsp; • &nbsp;
+              You own {balanceSOCKS && `${amountFormatter(balanceSOCKS, 18, 0)}`} SOCKSCLASSIC&nbsp; • &nbsp;
             </SockCount>
           ) : (
             ''

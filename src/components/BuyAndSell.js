@@ -144,7 +144,7 @@ export default function BuyAndSell({
 
     return (
       <>
-        <p>{state.count} SOCKS</p>
+        <p>{state.count} SOCKSCLASSIC</p>
         {conditionalRender}
       </>
     )
@@ -178,7 +178,7 @@ export default function BuyAndSell({
         <ButtonFrame
           className="button"
           disabled={validationError !== null}
-          text={account === null ? 'Connect Wallet' : buying ? 'Buy SOCKS' : 'Sell SOCKS'}
+          text={account === null ? 'Connect Wallet' : buying ? 'Buy SOCKSCLASSIC' : 'Sell SOCKSCLASSIC'}
           type={'cta'}
           onClick={() => {
             if (account === null) {

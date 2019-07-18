@@ -57,7 +57,7 @@ export default function Pending({ hash, type, amount }) {
             🧦
           </span>
         </Emoji>
-        {`Buying ${amountFormatter(amount, 18, 0)} SOCKS`}
+        {`Buying ${amountFormatter(amount, 18, 0)} SOCKSCLASSIC`}
         <SubText>incoming...</SubText>
         <EtherscanLink href={link(hash)} target="_blank" rel="noopener noreferrer">
           transaction details ↗
