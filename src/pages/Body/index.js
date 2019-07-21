@@ -49,10 +49,7 @@ export default function Body({
       <div>
         <Intro>
           purchasing a <b>SOCKSCLASSIC</b> entitles you to 1{' '}
-          <i>
-            <b>real</b>
-          </i>{' '}
-          pair of limited edition socks, shipped anywhere in the world.
+          limited edition ERC-721 token, shipped anywhere in the world.
         </Intro>
         <BuyButtons balance={balanceSOCKS} />
         <MarketData>
