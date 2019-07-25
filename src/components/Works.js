@@ -46,14 +46,15 @@ export default function Works({ closeCheckout }) {
 
       <Title>How it works:</Title>
       <Desc>
-        $SOCKSCLASSIC is a token that entitles you to 1 real pair of limited edition socks, shipped anywhere in the world.
+        $SOCKSCLASSIC is an ERC-20 token that entitles you to 1 limited edition ERC-721 token, shipped anywhere in the world.
       </Desc>
       <Desc>
-        You can sell the token back at any time. To get a <i>real</i> pair, redeem a $SOCKSCLASSIC token
+        You can sell the ERC-20 token back at any time. To get a <i>real</i> ERC-721 token, redeem a $SOCKSCLASSIC token
       </Desc>
       <Title>How it's priced:</Title>
       <Desc>
-        $SOCKSCLASSIC tokens are listed starting at $12 USD. Each buy/sell will move the price. The increase or decrease
+        $SOCKSCLASSIC tokens are airdropped to $SOCKS holders (2019.07.02, 15:57:03 UTC), remaining tokens are 
+        listed against 0.5{' '}ETH. Each buy/sell will move the price. The increase or decrease
         follows a{' '}
         <a
           href="https://blog.relevant.community/bonding-curves-in-depth-intuition-parametrization-d3905a681e0a"
@@ -67,7 +68,7 @@ export default function Works({ closeCheckout }) {
       <Title>Unipay:</Title>
       <Desc>
         Buying or selling socks uses the uniswap protocol and accepts any token input as a payment method. The pool of
-        SOCKSCLASSIC is a uniswap pool where 500 SOCKSCLASSIC tokens were deposited along with the starting value of ETH.{' '}
+        $SOCKSCLASSIC is a uniswap pool where ~241 $SOCKSCLASSIC tokens were deposited along with the starting value of ETH.{' '}
       </Desc>
       <Desc>
         <a href="https://docs.uniswap.io/" target="_blank" rel="noopener noreferrer">
@@ -75,7 +76,7 @@ export default function Works({ closeCheckout }) {
         </a>
       </Desc>
       <Desc>
-        <a href="mailto:contact@uniswap.io" target="_blank" rel="noopener noreferrer">
+        <a href="mailto:unisocksclassic@gmail.com" target="_blank" rel="noopener noreferrer">
           Get in touch.
         </a>
       </Desc>
