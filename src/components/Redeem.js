@@ -112,7 +112,7 @@ export default function Redeem({
             <InfoFrame pending={pending}>
               <Owned>
                 <SockCount>You own {balanceSOCKS && `${amountFormatter(balanceSOCKS, 18, 0)}`}</SockCount>
-                <p>Redeem SOCKS</p>
+                <p>Redeem SOCKSCLASSIC</p>
               </Owned>
               <IncrementToken
                 initialValue={Number(amountFormatter(balanceSOCKS, 18, 0))}
@@ -215,13 +215,13 @@ export default function Redeem({
             back
           </Back>
           <Count>2/3</Count>
-          <CheckoutPrompt>BURN THE SOCKS?</CheckoutPrompt> */}
+          <CheckoutPrompt>BURN THE SOCKSCLASSIC?</CheckoutPrompt> */}
           <ButtonFrame
             className="button"
             disabled={pending}
             pending={pending}
             // text={pending ? `Waiting for confirmation...` : `Redeem ${numberBurned} SOCKS`}
-            text={pending ? `Waiting for confirmation...` : `Place order (Redeem ${numberBurned} SOCKS) `}
+            text={pending ? `Waiting for confirmation...` : `Place order (Redeem ${numberBurned} SOCKSCLASSIC) `}
             type={'cta'}
             onClick={() => {
               burn(numberBurned.toString())

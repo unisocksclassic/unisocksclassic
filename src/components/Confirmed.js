@@ -89,7 +89,7 @@ export default function Confirmed({ hash, type, amount, clearLastTransaction, cl
           <ImgStyle src={sent} alt="Logo" />
           <InfoFrame>
             <Owned>
-              <p> {`You got ${amountFormatter(amount, 18, 0)} SOCKS!`}</p>
+              <p> {`You got ${amountFormatter(amount, 18, 0)} SOCKSCLASSIC!`}</p>
             </Owned>
           </InfoFrame>
         </TopFrame>
@@ -99,7 +99,7 @@ export default function Confirmed({ hash, type, amount, clearLastTransaction, cl
           </EtherscanLink>
         </CheckoutPrompt>
         <ButtonFrame
-          text={`Redeem your SOCKS now`}
+          text={`Redeem your SOCKSCLASSIC now`}
           type={'cta'}
           onClick={() => {
             clearLastTransaction()
@@ -118,7 +118,7 @@ export default function Confirmed({ hash, type, amount, clearLastTransaction, cl
           <ImgStyle src={sent} alt="Logo" />
           <InfoFrame>
             <Owned>
-              <p>You sold socks!</p>
+              <p>You sold SOCKSCLASSIC!</p>
             </Owned>
           </InfoFrame>
         </TopFrame>

@@ -24,7 +24,7 @@ function Header({ ready, dollarPrice, balanceSOCKS, setShowConnect }) {
         <span role="img" aria-label="unicorn">
           🦄
         </span>{' '}
-        Unisocks
+        Unisocks Classic
       </Unicorn>
       <Account onClick={() => handleAccount()} balanceSOCKS={balanceSOCKS}>
         {balanceSOCKS > 0 ? (

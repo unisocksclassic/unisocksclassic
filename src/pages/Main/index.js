@@ -150,17 +150,17 @@ export default function Main() {
   const [selectedTokenSymbol, setSelectedTokenSymbol] = useState(TOKEN_SYMBOLS.ETH)
 
   // get exchange contracts
-  const exchangeContractSOCKS = useExchangeContract(TOKEN_ADDRESSES.SOCKS)
+  const exchangeContractSOCKS = useExchangeContract(TOKEN_ADDRESSES.SOCKSCLASSIC)
   const exchangeContractSelectedToken = useExchangeContract(TOKEN_ADDRESSES[selectedTokenSymbol])
   const exchangeContractDAI = useExchangeContract(TOKEN_ADDRESSES.DAI)
 
   // get token contracts
-  const tokenContractSOCKS = useTokenContract(TOKEN_ADDRESSES.SOCKS)
+  const tokenContractSOCKS = useTokenContract(TOKEN_ADDRESSES.SOCKSCLASSIC)
   const tokenContractSelectedToken = useTokenContract(TOKEN_ADDRESSES[selectedTokenSymbol])
 
   // get balances
   const balanceETH = useAddressBalance(account, TOKEN_ADDRESSES.ETH)
-  const balanceSOCKS = useAddressBalance(account, TOKEN_ADDRESSES.SOCKS)
+  const balanceSOCKS = useAddressBalance(account, TOKEN_ADDRESSES.SOCKSCLASSIC)
   const balanceSelectedToken = useAddressBalance(account, TOKEN_ADDRESSES[selectedTokenSymbol])
 
   // get allowances
@@ -175,7 +175,7 @@ export default function Main() {
   const reserveSOCKSETH = useAddressBalance(exchangeContractSOCKS && exchangeContractSOCKS.address, TOKEN_ADDRESSES.ETH)
   const reserveSOCKSToken = useAddressBalance(
     exchangeContractSOCKS && exchangeContractSOCKS.address,
-    TOKEN_ADDRESSES.SOCKS
+    TOKEN_ADDRESSES.SOCKSCLASSIC
   )
   const { reserveETH: reserveSelectedTokenETH, reserveToken: reserveSelectedTokenToken } = useExchangeReserves(
     TOKEN_ADDRESSES[selectedTokenSymbol]
@@ -366,14 +366,14 @@ export default function Main() {
         maximumInputValue,
         ethers.constants.MaxUint256,
         deadline,
-        TOKEN_ADDRESSES.SOCKS
+        TOKEN_ADDRESSES.SOCKSCLASSIC
       )
       return exchangeContractSelectedToken.tokenToTokenSwapOutput(
         outputValue,
         maximumInputValue,
         ethers.constants.MaxUint256,
         deadline,
-        TOKEN_ADDRESSES.SOCKS,
+        TOKEN_ADDRESSES.SOCKSCLASSIC,
         {
           gasLimit: calculateGasMargin(estimatedGasLimit, GAS_MARGIN),
           gasPrice: estimatedGasPrice
