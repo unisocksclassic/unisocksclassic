@@ -32,9 +32,9 @@ export default function Card({ dollarPrice, reserveSOCKSCLASSICToken }) {
           </span>
           <Info>
             <Popover show={showPop} onMouseLeave={e => handleClickPopover(e)}>
-              <p style={{ marginTop: '0px' }}>The price of SOCKSCLASSIC will change when tokens are bought and sold.</p>
+              <p style={{ marginTop: '0px' }}>The design of SOCKSCLASSIC will not change when tokens are bought and sold.</p>
               <a
-                href="https://medium.com/frst/money-laundry-the-rise-of-the-crypto-sock-market-f979aafc3796"
+                href="https://medium.com/@unisocksclassic/socksclassic-the-new-beacon-of-digital-resistance-2f0567924012"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -44,7 +44,7 @@ export default function Card({ dollarPrice, reserveSOCKSCLASSICToken }) {
             <InfoButton onMouseEnter={e => handleClickPopover(e)} href="">
               ?
             </InfoButton>
-            <Dynamic>Dynamic Pricing</Dynamic>
+            <Dynamic>Original Design</Dynamic>
           </Info>
         </MarketData>
       </CardWrapper>
