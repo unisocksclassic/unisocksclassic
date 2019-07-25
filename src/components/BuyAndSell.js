@@ -67,7 +67,7 @@ export default function BuyAndSell({
   validateSell,
   dollarPrice,
   pending,
-  reserveSOCKSToken,
+  reserveSOCKSCLASSICToken,
   sell,
   dollarize,
   setCurrentTransaction,
@@ -214,7 +214,7 @@ export default function BuyAndSell({
           <CurrentPrice>
             {/* {dollarPrice && `$${amountFormatter(dollarPrice, 18, 2)} USD`} */}
             <USDPrice>{renderFormData()}</USDPrice>
-            <SockCount>{reserveSOCKSToken && `${amountFormatter(reserveSOCKSToken, 18, 0)}/500 available`}</SockCount>
+            <SockCount>{reserveSOCKSCLASSICToken && `${amountFormatter(reserveSOCKSCLASSICToken, 18, 0)}/500 available`}</SockCount>
           </CurrentPrice>
           <IncrementToken />
         </InfoFrame>

@@ -9,7 +9,7 @@ import RedeemButton from '../../components/RedeemButton'
 import Checkout from '../../components/Checkout'
 import { amountFormatter } from '../../utils'
 
-function Header({ ready, dollarPrice, balanceSOCKS, setShowConnect }) {
+function Header({ ready, dollarPrice, balanceSOCKSCLASSIC, setShowConnect }) {
   const { account, setConnector } = useWeb3Context()
 
   function handleAccount() {
@@ -19,20 +19,20 @@ function Header({ ready, dollarPrice, balanceSOCKS, setShowConnect }) {
   }
 
   return (
-    <HeaderFrame balanceSOCKS={balanceSOCKS}>
+    <HeaderFrame balanceSOCKSCLASSIC={balanceSOCKSCLASSIC}>
       <Unicorn>
         <span role="img" aria-label="unicorn">
           🦄
         </span>{' '}
         Unisocks Classic
       </Unicorn>
-      <Account onClick={() => handleAccount()} balanceSOCKS={balanceSOCKS}>
-        {balanceSOCKS > 0 ? (
-          <SockCount>{balanceSOCKS && `${amountFormatter(balanceSOCKS, 18, 0)}`} SOCKS</SockCount>
+      <Account onClick={() => handleAccount()} balanceSOCKSCLASSIC={balanceSOCKSCLASSIC}>
+        {balanceSOCKSCLASSIC > 0 ? (
+          <SockCount>{balanceSOCKSCLASSIC && `${amountFormatter(balanceSOCKSCLASSIC, 18, 0)}`} SOCKSCLASSIC</SockCount>
         ) : (
           <SockCount>Connect Wallet</SockCount>
         )}
-        <Status balanceSOCKS={balanceSOCKS} ready={ready} account={account} />
+        <Status balanceSOCKSCLASSIC={balanceSOCKSCLASSIC} ready={ready} account={account} />
       </Account>
     </HeaderFrame>
   )
@@ -44,7 +44,7 @@ const HeaderFrame = styled.div`
   box-sizing: border-box;
   margin: 0px;
   font-size: 1.25rem;
-  color: ${props => (props.balanceSOCKS ? props.theme.primary : 'white')};
+  color: ${props => (props.balanceSOCKSCLASSIC ? props.theme.primary : 'white')};
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -52,16 +52,16 @@ const HeaderFrame = styled.div`
 `
 
 const Account = styled.div`
-  background-color: ${props => (props.balanceSOCKS ? '#f1f2f6' : props.theme.blue)};
+  background-color: ${props => (props.balanceSOCKSCLASSIC ? '#f1f2f6' : props.theme.blue)};
   padding: 0.75rem;
   border-radius: 6px;
-  cursor: ${props => (props.balanceSOCKS ? 'auto' : 'pointer')};
+  cursor: ${props => (props.balanceSOCKSCLASSIC ? 'auto' : 'pointer')};
 
   transform: scale(1);
   transition: transform 0.3s ease;
 
   :hover {
-    transform: ${props => (props.balanceSOCKS ? 'scale(1)' : 'scale(1.02)')};
+    transform: ${props => (props.balanceSOCKSCLASSIC ? 'scale(1)' : 'scale(1.02)')};
     text-decoration: underline;
   }
 `
@@ -75,7 +75,7 @@ const SockCount = styled.p`
 `
 
 const Status = styled.div`
-  display: ${props => (props.balanceSOCKS ? 'initial' : 'none')};
+  display: ${props => (props.balanceSOCKSCLASSIC ? 'initial' : 'none')};
   width: 12px;
   height: 12px;
   border-radius: 100%;
@@ -99,8 +99,8 @@ export default function Body({
   burn,
   dollarize,
   dollarPrice,
-  balanceSOCKS,
-  reserveSOCKSToken
+  balanceSOCKSCLASSIC,
+  reserveSOCKSCLASSICToken
 }) {
   const [currentTransaction, _setCurrentTransaction] = useState({})
   const setCurrentTransaction = useCallback((hash, type, amount) => {
@@ -116,9 +116,9 @@ export default function Body({
 
   return (
     <AppWrapper overlay={state.visible}>
-      <Header ready={ready} dollarPrice={dollarPrice} balanceSOCKS={balanceSOCKS} setShowConnect={setShowConnect} />
+      <Header ready={ready} dollarPrice={dollarPrice} balanceSOCKSCLASSIC={balanceSOCKSCLASSIC} setShowConnect={setShowConnect} />
       <Content>
-        <Card dollarPrice={dollarPrice} reserveSOCKSToken={reserveSOCKSToken} />{' '}
+        <Card dollarPrice={dollarPrice} reserveSOCKSCLASSICToken={reserveSOCKSCLASSICToken} />{' '}
         <Info>
           <div style={{ marginBottom: '4px' }}>Buy and sell real socks with digital currency.</div>
           <div style={{ marginBottom: '4px' }}>
@@ -148,8 +148,8 @@ export default function Body({
             </a>
           </SubInfo> */}
         </Info>
-        <BuyButtons balanceSOCKS={balanceSOCKS} />
-        <RedeemButton balanceSOCKS={balanceSOCKS} />
+        <BuyButtons balanceSOCKSCLASSIC={balanceSOCKSCLASSIC} />
+        <RedeemButton balanceSOCKSCLASSIC={balanceSOCKSCLASSIC} />
       </Content>
       <Checkout
         selectedTokenSymbol={selectedTokenSymbol}
@@ -161,9 +161,9 @@ export default function Body({
         validateSell={validateSell}
         sell={sell}
         burn={burn}
-        balanceSOCKS={balanceSOCKS}
+        balanceSOCKSCLASSIC={balanceSOCKSCLASSIC}
         dollarPrice={dollarPrice}
-        reserveSOCKSToken={reserveSOCKSToken}
+        reserveSOCKSCLASSICToken={reserveSOCKSCLASSICToken}
         dollarize={dollarize}
         showConnect={showConnect}
         setShowConnect={setShowConnect}

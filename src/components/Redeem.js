@@ -51,7 +51,7 @@ export function Controls({ closeCheckout, theme, type }) {
 
 export default function Redeem({
   burn,
-  balanceSOCKS,
+  balanceSOCKSCLASSIC,
   balance,
   ready,
   unlock,
@@ -94,7 +94,7 @@ export default function Redeem({
         <ButtonFrame
           className="button"
           disabled={false}
-          text={account === null ? 'Connect Wallet' : 'Redeem SOCKS'}
+          text={account === null ? 'Connect Wallet' : 'Redeem SOCKSCLASSIC'}
           type={'cta'}
           onClick={() => {
             setConnector('Injected', { suppressAndThrowErrors: true }).catch(() => {
@@ -111,12 +111,12 @@ export default function Redeem({
             <ImgStyle src={test} alt="Logo" hasPickedAmount={hasPickedAmount} />
             <InfoFrame pending={pending}>
               <Owned>
-                <SockCount>You own {balanceSOCKS && `${amountFormatter(balanceSOCKS, 18, 0)}`}</SockCount>
+                <SockCount>You own {balanceSOCKSCLASSIC && `${amountFormatter(balanceSOCKSCLASSIC, 18, 0)}`}</SockCount>
                 <p>Redeem SOCKSCLASSIC</p>
               </Owned>
               <IncrementToken
-                initialValue={Number(amountFormatter(balanceSOCKS, 18, 0))}
-                max={Number(amountFormatter(balanceSOCKS, 18, 0))}
+                initialValue={Number(amountFormatter(balanceSOCKSCLASSIC, 18, 0))}
+                max={Number(amountFormatter(balanceSOCKSCLASSIC, 18, 0))}
               />
             </InfoFrame>
           </TopFrame>
@@ -141,7 +141,7 @@ export default function Redeem({
             <InfoFrame hasPickedAmount={hasPickedAmount}>
               <ImgStyle src={test} alt="Logo" hasPickedAmount={hasPickedAmount} />
               <Owned>
-                <p>{state.count} Unisocks</p>
+                <p>{state.count} Unisocks Classic</p>
                 <p style={{ fontSize: '20px', fontWeight: '400', color: '#AEAEAE' }}>One size fits most</p>
                 <p style={{ fontSize: '14px', fontWeight: '500', marginTop: '16px', color: '#AEAEAE' }}>Edition 0</p>
               </Owned>
@@ -171,7 +171,7 @@ export default function Redeem({
             <InfoFrame hasPickedAmount={hasPickedAmount}>
               <ImgStyle src={test} alt="Logo" hasPickedAmount={hasPickedAmount} />
               <Owned>
-                <p style={{ fontSize: '18px' }}>{state.count} Unisocks</p>
+                <p style={{ fontSize: '18px' }}>{state.count} Unisocks Classic</p>
                 <p style={{ fontSize: '14px', fontWeight: '500' }}>One size fits most</p>
                 <p
                   style={{
@@ -190,7 +190,7 @@ export default function Redeem({
               <ImgStyle src={nfc} alt="Logo" hasPickedAmount={hasPickedAmount} />
               <Bonus>Bonus</Bonus>
               <Owned>
-                <p style={{ fontSize: '18px' }}>{state.count} Unisocks NFT</p>
+                <p style={{ fontSize: '18px' }}>{state.count} Unisocks Classic NFT</p>
                 <p style={{ fontSize: '14px', fontWeight: '500' }}>Digital Collectible (10kb)</p>
                 <p
                   style={{
@@ -220,7 +220,7 @@ export default function Redeem({
             className="button"
             disabled={pending}
             pending={pending}
-            // text={pending ? `Waiting for confirmation...` : `Redeem ${numberBurned} SOCKS`}
+            // text={pending ? `Waiting for confirmation...` : `Redeem ${numberBurned} SOCKSCLASSIC`}
             text={pending ? `Waiting for confirmation...` : `Place order (Redeem ${numberBurned} SOCKSCLASSIC) `}
             type={'cta'}
             onClick={() => {

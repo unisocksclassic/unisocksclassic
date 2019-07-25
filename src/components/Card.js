@@ -6,7 +6,7 @@ import { amountFormatter } from '../utils'
 
 import Gallery from './Gallery'
 
-export default function Card({ dollarPrice, reserveSOCKSToken }) {
+export default function Card({ dollarPrice, reserveSOCKSCLASSICToken }) {
   const [showPop, setShowPop] = useState(false)
 
   function handleClickPopover(e) {
@@ -27,12 +27,12 @@ export default function Card({ dollarPrice, reserveSOCKSToken }) {
           <span>
             <CurrentPrice>{dollarPrice ? `$${amountFormatter(dollarPrice, 18, 2)} USD` : '$0.00'}</CurrentPrice>
             <SockCount>
-              {reserveSOCKSToken ? `${amountFormatter(reserveSOCKSToken, 18, 0)}/500 available` : '500/500 available'}
+              {reserveSOCKSCLASSICToken ? `${amountFormatter(reserveSOCKSCLASSICToken, 18, 0)}/500 available` : '500/500 available'}
             </SockCount>
           </span>
           <Info>
             <Popover show={showPop} onMouseLeave={e => handleClickPopover(e)}>
-              <p style={{ marginTop: '0px' }}>The price of SOCKS will change when tokens are bought and sold.</p>
+              <p style={{ marginTop: '0px' }}>The price of SOCKSCLASSIC will change when tokens are bought and sold.</p>
               <a
                 href="https://medium.com/frst/money-laundry-the-rise-of-the-crypto-sock-market-f979aafc3796"
                 target="_blank"
