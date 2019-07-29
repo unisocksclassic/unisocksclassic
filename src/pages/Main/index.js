@@ -86,7 +86,7 @@ function calculateAmount(
   reserveSelectedTokenToken
 ) {
   // eth to token - buy
-  if (inputTokenSymbol === TOKEN_SYMBOLS.ETH && outputTokenSymbol === TOKEN_SYMBOLS.CLASSIC) {
+  if (inputTokenSymbol === TOKEN_SYMBOLS.ETH && outputTokenSymbol === TOKEN_SYMBOLS.SOCKSCLASSIC) {
     const amount = calculateEtherTokenInputFromOutput(SOCKSCLASSICAmount, reserveSOCKSCLASSICETH, reserveSOCKSCLASSICToken)
     if (amount.lte(ethers.constants.Zero) || amount.gte(ethers.constants.MaxUint256)) {
       throw Error()
