@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { ethers } from 'ethers'
 import { useWeb3Context } from 'web3-react'
 
-import Button from './Button'
+import { ButtonFrame } from './Common'
 import { useAppContext } from '../context'
 import { TRADE_TYPES } from '../utils'
 
@@ -24,10 +24,6 @@ const BuyButtonFrame = styled.div`
     /* margin: 1.5rem 2rem 0.5rem 2rem; */
   }
 `
-const ButtonFrame = styled(Button)`
-  width: 100%;
-`
-
 const Shim = styled.div`
   width: 1rem !important;
   height: 1rem;
