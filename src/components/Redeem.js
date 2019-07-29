@@ -293,6 +293,10 @@ const Owned = styled.div`
   margin-bottom: 12px;
   margin: 0px;
   white-space: pre-wrap;
+
+  p {
+    margin: 0;
+  }
 `
 
 const Bonus = styled.div`
@@ -318,11 +322,6 @@ const SockCount = styled.span`
   width: 100%;
   margin-bottom: 0.5rem;
   color: ${props => props.theme.uniswapPink};
-  cursor: pointer;
-
-  :hover {
-    text-decoration: underline;
-  }
 `
 
 const Back = styled.div`
