@@ -246,7 +246,7 @@ export default function BuyAndSell({
           type={'cta'}
           pending={pending}
           onClick={() => {
-            unlock(buying).then(({ hash }) => {
+            unlock({ buying }).then(({ hash }) => {
               setCurrentTransaction(hash, TRADE_TYPES.UNLOCK, undefined)
             })
           }}

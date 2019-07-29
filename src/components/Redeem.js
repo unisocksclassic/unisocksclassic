@@ -5,7 +5,7 @@ import { useWeb3Context } from 'web3-react'
 import { useAppContext } from '../context'
 import RedeemForm from './RedeemForm'
 import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls } from './Common'
-import { amountFormatter } from '../utils'
+import { ERROR_CODES, TRADE_TYPES, REDEEM_ADDRESS, TOKEN_ADDRESSES, amountFormatter } from '../utils'
 
 import IncrementToken from './IncrementToken'
 import test from './Gallery/test.png'
@@ -38,8 +38,36 @@ export function RedeemControls({ closeCheckout, theme, type }) {
   )
 }
 
+function getValidationErrorMessage(validationError) {
+  if (!validationError) {
+    return null
+  } else {
+    switch (validationError.code) {
+      case ERROR_CODES.INVALID_AMOUNT: {
+        return 'Invalid Amount'
+      }
+      case ERROR_CODES.INVALID_TRADE: {
+        return 'Invalid Trade'
+      }
+      case ERROR_CODES.INSUFFICIENT_ALLOWANCE: {
+        return 'Set Allowance to Continue'
+      }
+      case ERROR_CODES.INSUFFICIENT_ETH_GAS: {
+        return 'Not Enough ETH to Pay Gas'
+      }
+      case ERROR_CODES.INSUFFICIENT_SELECTED_TOKEN_BALANCE: {
+        return 'Not Enough of Selected Token'
+      }
+      default: {
+        return 'Unknown Error'
+      }
+    }
+  }
+}
+
 export default function Redeem({
   burn,
+  validateRedeem,
   balanceSOCKSCLASSIC,
   balance,
   ready,
@@ -53,12 +81,13 @@ export default function Redeem({
   const [state] = useAppContext()
 
   const [numberBurned, setNumberBurned] = useState()
+  const [validationState, setValidationState] = useState({})
+  const [validationError, setValidationError] = useState()
   const [hasPickedAmount, setHasPickedAmount] = useState(false)
   const [transactionHash, setTransactionHash] = useState('')
   const [lastTransactionHash, setLastTransactionHash] = useState('')
 
   const [hasBurnt, setHasBurnt] = useState(false)
-  const [userAddress, setUserAddress] = useState('')
 
   const pending = !!transactionHash
 
@@ -72,8 +101,45 @@ export default function Redeem({
     }
   })
 
+  // redeem state validation
+  useEffect(() => {
+    if (ready) {
+      try {
+        const { error: validationError, ...validationState } = validateRedeem(String(state.count))
+        setValidationState(validationState)
+        setValidationError(validationError || null)
+
+        return () => {
+          setValidationState({})
+          setValidationError()
+        }
+      } catch (error) {
+        setValidationState({})
+        setValidationError(error)
+      }
+    }
+  }, [ready, state.count, validateRedeem])
+
+  const shouldRenderUnlock = validationError && validationError.code === ERROR_CODES.INSUFFICIENT_ALLOWANCE
+
+  const errorMessage = getValidationErrorMessage(validationError)
+
   function link(hash) {
     return `https://etherscan.io/tx/${hash}`
+  }
+
+  function getText(account, errorMessage, pending, amount) {
+    if (account === null) {
+      return 'Connect Wallet'
+    } else if (ready && !errorMessage) {
+      if (pending) {
+        return 'Waiting for confirmation'
+      } else {
+        return `Redeem {state.count} SOCKSCLASSIC`
+      }
+    } else {
+      return errorMessage ? errorMessage : 'Loading...'
+    }
   }
 
   function renderContent() {
@@ -156,27 +222,38 @@ export default function Redeem({
           <Count>2/3</Count>
           <CheckoutPrompt>BURN THE SOCKSCLASSIC?</CheckoutPrompt> */}
           <Shim />
-          <ButtonFrame
-            className="button"
-            disabled={pending}
-            pending={pending}
-            // text={pending ? `Waiting for confirmation...` : `Redeem ${numberBurned} SOCKSCLASSIC`}
-            text={pending ? `Waiting for confirmation...` : `Place order (Redeem ${numberBurned} SOCKSCLASSIC) `}
-            type={'cta'}
-            onClick={() => {
-              burn(numberBurned.toString())
-                .then(response => {
-                  setTransactionHash(response.hash)
+
+          {shouldRenderUnlock ? (
+            <ButtonFrame
+              text={`Unlock SOCKSCLASSIC`}
+              type={'cta'}
+              pending={pending}
+              onClick={() => {
+                unlock({ address: REDEEM_ADDRESS, token: TOKEN_ADDRESSES.SOCKSCLASSIC }).then(({ hash }) => {
+                  setCurrentTransaction(hash, TRADE_TYPES.UNLOCK, undefined)
                 })
-                .catch(() => {
-                  setTransactionHash(
-                    true
-                      ? '0x888503cb966a67192afb74c740abaec0b7e8bda370bc8f853fb040eab247c63f'
-                      : '0x8cd2cc7ebb7d47dd0230bd505fa4b3375faabb1c9f92137f725b85e4de3f61df'
-                  )
-                })
-            }}
-          />
+              }}
+            />
+          ) : (
+            <ButtonFrame
+              className="button"
+              disabled={validationError !== null || (pending && transactionHash)}
+              pending={pending}
+              // text={pending ? `Waiting for confirmation...` : `Redeem ${numberBurned} SOCKSCLASSIC`}
+              text={
+                (getText(account, errorMessage, pending),
+                pending ? `Waiting for confirmation...` : `Redeem ${numberBurned} SOCKSCLASSIC`)
+              }
+              type={'cta'}
+              onClick={() => {
+                burn(numberBurned.toString())
+                  .then(response => {
+                    setTransactionHash(response.hash)
+                  })
+                  .catch(() => {})
+              }}
+            />
+          )}
           <Shim />
           <Back disabled={!!pending}>
             {pending ? (

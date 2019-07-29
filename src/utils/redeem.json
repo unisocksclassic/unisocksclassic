@@ -1,0 +1,168 @@
+[
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "_owner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "_tokenId",
+                "type": "uint256"
+            }
+        ],
+        "name": "Redemption",
+        "type": "event"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_erc20",
+                "type": "address"
+            },
+            {
+                "name": "_erc721",
+                "type": "address"
+            }
+        ],
+        "outputs": [],
+        "payable": false,
+        "type": "constructor"
+    },
+    {
+        "constant": false,
+        "gas": 726049,
+        "inputs": [
+            {
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "name": "redeem",
+        "outputs": [
+            {
+                "name": "out",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "gas": 35639,
+        "inputs": [
+            {
+                "name": "_address",
+                "type": "address"
+            }
+        ],
+        "name": "change_token_address",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "gas": 35669,
+        "inputs": [
+            {
+                "name": "_address",
+                "type": "address"
+            }
+        ],
+        "name": "change_nft_address",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "gas": 35796,
+        "inputs": [
+            {
+                "name": "_owner",
+                "type": "address"
+            }
+        ],
+        "name": "changeOwner",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "gas": 35690,
+        "inputs": [
+            {
+                "name": "_index",
+                "type": "uint256"
+            }
+        ],
+        "name": "setStartingIndex",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "gas": 663,
+        "inputs": [],
+        "name": "token",
+        "outputs": [
+            {
+                "name": "out",
+                "type": "address",
+                "unit": "SocksERC20"
+            }
+        ],
+        "payable": false,
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "gas": 693,
+        "inputs": [],
+        "name": "nft",
+        "outputs": [
+            {
+                "name": "out",
+                "type": "address",
+                "unit": "SocksERC721"
+            }
+        ],
+        "payable": false,
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "gas": 723,
+        "inputs": [],
+        "name": "tokensMinted",
+        "outputs": [
+            {
+                "name": "out",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "gas": 753,
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "name": "out",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "type": "function"
+    }
+]
