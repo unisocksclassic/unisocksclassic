@@ -54,7 +54,6 @@ export default function Redeem({
 
   const [numberBurned, setNumberBurned] = useState()
   const [hasPickedAmount, setHasPickedAmount] = useState(false)
-  const [hasConfirmedAddress, setHasConfirmedAddress] = useState(false)
   const [transactionHash, setTransactionHash] = useState('')
   const [lastTransactionHash, setLastTransactionHash] = useState('')
 
@@ -122,37 +121,6 @@ export default function Redeem({
           />
         </ConfirmedFrame>
       )
-    } else if (!hasConfirmedAddress) {
-      return (
-        <ConfirmedFrame>
-          <TopFrame hasPickedAmount={hasPickedAmount}>
-            <RedeemControls closeCheckout={closeCheckout} type="shipping" />
-
-            <InfoFrame hasPickedAmount={hasPickedAmount}>
-              <ImgStyle src={test} alt="Logo" hasPickedAmount={hasPickedAmount} />
-              <Owned>
-                <p>{state.count} Unisocks Classic</p>
-                <p style={{ fontSize: '20px', fontWeight: '400', color: '#AEAEAE' }}>One size fits most</p>
-                <p style={{ fontSize: '14px', fontWeight: '500', marginTop: '16px', color: '#AEAEAE' }}>Edition 0</p>
-              </Owned>
-            </InfoFrame>
-          </TopFrame>
-
-          {/* <Count>2/3</Count> */}
-          <CheckoutPrompt>Where should we send them?</CheckoutPrompt>
-          <RedeemFrame burn={burn} setHasConfirmedAddress={setHasConfirmedAddress} setUserAddress={setUserAddress} />
-          <Back>
-            <span
-              onClick={() => {
-                setNumberBurned()
-                setHasPickedAmount(false)
-              }}
-            >
-              back
-            </span>
-          </Back>
-        </ConfirmedFrame>
-      )
     } else if (!hasBurnt) {
       return (
         <ConfirmedFrame>
@@ -218,7 +186,7 @@ export default function Redeem({
             ) : (
               <span
                 onClick={() => {
-                  setHasConfirmedAddress(false)
+                  setHasPickedAmount(false)
                 }}
               >
                 back
