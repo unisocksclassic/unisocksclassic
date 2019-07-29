@@ -78,7 +78,7 @@ export default function SelectToken({ selectedTokenSymbol, setSelectedTokenSymbo
 const NoHeight = styled.div`
   height: 0px;
   position: relative;
-  top: -34px;
+  top: -54px;
   left: 144px;
 `
 

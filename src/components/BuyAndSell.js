@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useWeb3Context } from 'web3-react'
 
-import Button from './Button'
 import SelectToken from './SelectToken'
+import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls } from './Common'
 import IncrementToken from './IncrementToken'
 import { useAppContext } from '../context'
 import { ERROR_CODES, amountFormatter, TRADE_TYPES } from '../utils'
@@ -72,7 +72,8 @@ export default function BuyAndSell({
   dollarize,
   setCurrentTransaction,
   currentTransactionHash,
-  setShowConnect
+  setShowConnect,
+  closeCheckout
 }) {
   const [state] = useAppContext()
   const { account, setConnector } = useWeb3Context()
@@ -200,21 +201,17 @@ export default function BuyAndSell({
   }
 
   return (
-    <>
+    <ConfirmedFrame>
       <TopFrame>
-        {/* <button onClick={() => fake()}>test</button> */}
-        <Unicorn>
-          <span role="img" aria-label="unicorn">
-            🦄
-          </span>{' '}
-          Pay
-        </Unicorn>
+        <Controls closeCheckout={closeCheckout} />
         <ImgStyle src={test} alt="Logo" />
         <InfoFrame pending={pending}>
           <CurrentPrice>
             {/* {dollarPrice && `$${amountFormatter(dollarPrice, 18, 2)} USD`} */}
             <USDPrice>{renderFormData()}</USDPrice>
-            <SockCount>{reserveSOCKSCLASSICToken && `${amountFormatter(reserveSOCKSCLASSICToken, 18, 0)}/500 available`}</SockCount>
+            <SockCount>
+              {reserveSOCKSCLASSICToken && `${amountFormatter(reserveSOCKSCLASSICToken, 18, 0)}/500 available`}
+            </SockCount>
           </CurrentPrice>
           <IncrementToken />
         </InfoFrame>
@@ -242,6 +239,7 @@ export default function BuyAndSell({
           />
         </CheckoutControls>
       )}
+      <Shim />
       {shouldRenderUnlock ? (
         <ButtonFrame
           text={`Unlock ${buying ? selectedTokenSymbol : 'SOCKSCLASSIC'}`}
@@ -280,26 +278,9 @@ export default function BuyAndSell({
           }}
         />
       )}
-    </>
+    </ConfirmedFrame>
   )
 }
-
-const TopFrame = styled.div`
-  width: 100%;
-  max-width: 375px;
-  background: #000000;
-  background: linear-gradient(162.92deg, #2b2b2b 12.36%, #000000 94.75%);
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.4);
-  border-radius: 8px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 16px;
-  box-sizing: border-box;
-`
 
 const Unicorn = styled.p`
   width: 100%;
@@ -333,7 +314,11 @@ const SockCount = styled.span`
   font-feature-settings: 'tnum' on, 'onum' on;
 `
 
-const USDPrice = styled.div``
+const USDPrice = styled.div`
+  p {
+    margin: 0px;
+  }
+`
 
 const CurrentPrice = styled.div`
   font-weight: 600;
@@ -344,7 +329,7 @@ const CurrentPrice = styled.div`
 
 const CheckoutControls = styled.span`
   width: 100%;
-  margin: 16px 16px 0 16px;
+  // margin: 16px 16px 0 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -358,12 +343,6 @@ const CheckoutPrompt = styled.p`
   margin-left: 8px;
   text-align: left;
   width: 100%;
-`
-
-const ButtonFrame = styled(Button)`
-  margin: 16px;
-  height: 48px;
-  padding: 16px;
 `
 
 const EtherscanLink = styled.a`

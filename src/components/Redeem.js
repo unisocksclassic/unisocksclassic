@@ -3,17 +3,14 @@ import styled from 'styled-components'
 import { useWeb3Context } from 'web3-react'
 
 import { useAppContext } from '../context'
-import Button from './Button'
 import RedeemForm from './RedeemForm'
+import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls } from './Common'
 import { amountFormatter } from '../utils'
 
 import IncrementToken from './IncrementToken'
 import test from './Gallery/test.png'
-import nfc from './Gallery/nfc.png'
+import nfc from './Gallery/sent.png'
 import sent from './Gallery/sent.png'
-
-import close from './Gallery/close.svg'
-import closeDark from './Gallery/close_dark.svg'
 
 import Confetti from 'react-dom-confetti'
 
@@ -30,22 +27,14 @@ const config = {
   colors: ['#a864fd', '#29cdff', '#78ff44', '#ff718d', '#fdff6a']
 }
 
-export function Controls({ closeCheckout, theme, type }) {
+export function RedeemControls({ closeCheckout, theme, type }) {
   return (
-    <FrameControls>
-      <Unicorn theme={theme}>
-        <span role="img" aria-label="unicorn">
-          🦄
-        </span>{' '}
-        Pay{' '}
-        <span style={{ color: '#737373' }}>
-          {' '}
-          {type === 'confirm' ? ' / Order Details' : type === 'shipping' ? ' / Shipping Details' : ''}
-        </span>
-      </Unicorn>
-
-      <Close src={theme === 'dark' ? closeDark : close} onClick={() => closeCheckout()} alt="close" />
-    </FrameControls>
+    <Controls theme={theme} closeCheckout={closeCheckout}>
+      Pay{' '}
+      <span style={{ color: '#737373' }}>
+        {type === 'confirm' ? ' / Order Details' : type === 'shipping' ? ' / Shipping Details' : ''}
+      </span>
+    </Controls>
   )
 }
 
@@ -105,9 +94,9 @@ export default function Redeem({
       )
     } else if (!hasPickedAmount) {
       return (
-        <>
+        <ConfirmedFrame>
           <TopFrame hasPickedAmount={hasPickedAmount}>
-            <Controls closeCheckout={closeCheckout} />
+            <RedeemControls closeCheckout={closeCheckout} />
             <ImgStyle src={test} alt="Logo" hasPickedAmount={hasPickedAmount} />
             <InfoFrame pending={pending}>
               <Owned>
@@ -120,6 +109,7 @@ export default function Redeem({
               />
             </InfoFrame>
           </TopFrame>
+          <Shim />
           <ButtonFrame
             className="button"
             disabled={false}
@@ -130,13 +120,13 @@ export default function Redeem({
               setHasPickedAmount(true)
             }}
           />
-        </>
+        </ConfirmedFrame>
       )
     } else if (!hasConfirmedAddress) {
       return (
-        <>
+        <ConfirmedFrame>
           <TopFrame hasPickedAmount={hasPickedAmount}>
-            <Controls closeCheckout={closeCheckout} type="shipping" />
+            <RedeemControls closeCheckout={closeCheckout} type="shipping" />
 
             <InfoFrame hasPickedAmount={hasPickedAmount}>
               <ImgStyle src={test} alt="Logo" hasPickedAmount={hasPickedAmount} />
@@ -161,34 +151,15 @@ export default function Redeem({
               back
             </span>
           </Back>
-        </>
+        </ConfirmedFrame>
       )
     } else if (!hasBurnt) {
       return (
-        <>
+        <ConfirmedFrame>
           <TopFrame hasPickedAmount={hasPickedAmount}>
-            <Controls closeCheckout={closeCheckout} type="confirm" />
-            <InfoFrame hasPickedAmount={hasPickedAmount}>
-              <ImgStyle src={test} alt="Logo" hasPickedAmount={hasPickedAmount} />
-              <Owned>
-                <p style={{ fontSize: '18px' }}>{state.count} Unisocks Classic</p>
-                <p style={{ fontSize: '14px', fontWeight: '500' }}>One size fits most</p>
-                <p
-                  style={{
-                    fontSize: '12px',
-                    fontWeight: '500',
-                    color: '#AEAEAE',
-                    marginTop: '16px',
-                    marginRight: '16px'
-                  }}
-                >
-                  {userAddress}
-                </p>
-              </Owned>
-            </InfoFrame>
+            <RedeemControls closeCheckout={closeCheckout} type="confirm" />
             <InfoFrame hasPickedAmount={hasPickedAmount}>
               <ImgStyle src={nfc} alt="Logo" hasPickedAmount={hasPickedAmount} />
-              <Bonus>Bonus</Bonus>
               <Owned>
                 <p style={{ fontSize: '18px' }}>{state.count} Unisocks Classic NFT</p>
                 <p style={{ fontSize: '14px', fontWeight: '500' }}>Digital Collectible (10kb)</p>
@@ -216,6 +187,7 @@ export default function Redeem({
           </Back>
           <Count>2/3</Count>
           <CheckoutPrompt>BURN THE SOCKSCLASSIC?</CheckoutPrompt> */}
+          <Shim />
           <ButtonFrame
             className="button"
             disabled={pending}
@@ -237,6 +209,7 @@ export default function Redeem({
                 })
             }}
           />
+          <Shim />
           <Back disabled={!!pending}>
             {pending ? (
               <EtherscanLink href={link(transactionHash)} target="_blank" rel="noopener noreferrer">
@@ -252,13 +225,13 @@ export default function Redeem({
               </span>
             )}
           </Back>
-        </>
+        </ConfirmedFrame>
       )
     } else {
       return (
-        <>
+        <ConfirmedFrame>
           <TopFrame hasPickedAmount={hasPickedAmount}>
-            <Controls closeCheckout={closeCheckout} />
+            <RedeemControls closeCheckout={closeCheckout} />
             <ImgStyle src={sent} alt="Logo" hasPickedAmount={hasPickedAmount} hasBurnt={hasBurnt} />
             <InfoFrame>
               <Owned>
@@ -275,7 +248,7 @@ export default function Redeem({
               View on Etherscan.
             </EtherscanLink>
           </div>
-        </>
+        </ConfirmedFrame>
       )
     }
   }
@@ -289,52 +262,6 @@ export default function Redeem({
     </>
   )
 }
-
-const TopFrame = styled.div`
-  width: 100%;
-  max-width: 375px;
-  background: #000000;
-  background: linear-gradient(162.92deg, #2b2b2b 12.36%, #000000 94.75%);
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.4);
-  border-radius: 8px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 16px;
-  box-sizing: border-box;
-`
-
-const FrameControls = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
-`
-
-const Unicorn = styled.p`
-  color: ${props => (props.theme === 'dark' ? '#000' : '#fff')};
-  font-weight: 600;
-  margin: 0px;
-  font-size: 16px;
-`
-
-const Close = styled.img`
-  width: 16px;
-  color: #fff;
-  font-weight: 600;
-  margin: 0px;
-  /* margin-right: 2px;
-  margin-top: -7px; */
-  height: 16px;
-  font-size: 16px;
-  padding: 4px;
-  cursor: pointer;
-`
 
 const InfoFrame = styled.div`
   opacity: ${props => (props.pending ? 0.6 : 1)};
@@ -426,12 +353,6 @@ const CheckoutPrompt = styled.p`
   color: '#000';
   font-style: italic;
   width: 100%;
-`
-
-const ButtonFrame = styled(Button)`
-  margin: 16px;
-  height: 48px;
-  padding: 16px;
 `
 
 const RedeemFrame = styled(RedeemForm)`

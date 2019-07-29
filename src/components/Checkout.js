@@ -165,6 +165,7 @@ export default function Checkout({
             dollarPrice={dollarPrice}
             reserveSOCKSCLASSICToken={reserveSOCKSCLASSICToken}
             pending={pending}
+            closeCheckout={closeCheckout}
           />
         )
       } else {
@@ -185,7 +186,7 @@ export default function Checkout({
   }
 
   return (
-    <div>
+    <FrameHolder isVisible={state.visible}>
       <CheckoutFrame isVisible={state.visible || showConnect}>
         {renderContent()}{' '}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
@@ -193,12 +194,20 @@ export default function Checkout({
         </div>
       </CheckoutFrame>
       <CheckoutBackground onClick={() => closeCheckout()} isVisible={state.visible || showConnect} />
-    </div>
+    </FrameHolder>
   )
 }
 
+const FrameHolder = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  pointer-events: ${props => (props.isVisible ? 'all' : 'none')};
+`
 const CheckoutFrame = styled.div`
-  position: fixed;
+  position: relative;
   bottom: ${props => (props.isVisible ? '0px' : '-100%')};
   left: 0px;
   z-index: ${props => (props.isVisible ? '2' : '-1  ')};
@@ -207,43 +216,42 @@ const CheckoutFrame = styled.div`
   transition: bottom 0.3s;
   width: 100%;
   margin: 0;
-  margin-top: 20px;
+  // margin-top: 60px;
   height: 524px;
   height: fit-content;
   border-radius: 8px 8px 0px 0px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
+  // display: flex;
+  // flex-direction: row;
+  // flex-wrap: wrap;
+  // align-items: flex-start;
+  // justify-content: space-between;
   background-color: #fff;
   border-color: ${props => props.theme.black};
   color: ${props => props.theme.primary};
-  box-sizing: border-box;
+  // box-sizing: border-box;
 
   @media only screen and (min-device-width: 768px) {
-    max-width: 375px;
-    left: 0;
-    right: 0;
+    width: 375px;
+    // left: 0;
+    // right: 0;
     border-radius: 8px 8px;
     z-index: ${props => (props.isVisible ? '2' : '-1  ')};
     opacity: ${props => (props.isVisible ? '1' : '0')};
 
     bottom: ${props => (props.isVisible ? '20%' : '-100%')};
 
-    position: absolute;
+    // position: absolute;
     left: 50%;
-    top: 40%;
-    -webkit-transform: translateX(-50%) translateY(-50%);
-    -ms-transform: translateX(-50%) translateY(-50%);
+    top: 50%;
+    // -webkit-transform: translateX(-50%) translateY(-50%);
+    // -ms-transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%) translateY(-50%);
-    width: 100%;
+    // width: 100%;
   }
 
-  p {
-    margin: 0px;
-  }
+  // p {
+  // margin: 0px;
+  // }
 `
 
 const CheckoutBackground = styled.div`

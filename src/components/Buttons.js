@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import Button from './Button'
+import { ButtonFrame } from './Common'
 import { useAppContext } from '../context'
 import { TRADE_TYPES } from '../utils'
 
@@ -22,14 +22,6 @@ const BuyButtonFrame = styled.div`
     /* margin: 1.5rem 2rem 0.5rem 2rem; */
   }
 `
-const ButtonFrame = styled(Button)`
-  width: 100%;
-`
-
-// const Shim = styled.div`
-//   width: 2rem !important;
-//   height: 2rem;
-// `
 
 export default function BuyButtons(props) {
   const [, setState] = useAppContext()
