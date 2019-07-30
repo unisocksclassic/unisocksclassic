@@ -5,7 +5,7 @@ import { useWeb3Context } from 'web3-react'
 
 import { useAppContext } from '../context'
 import RedeemForm from './RedeemForm'
-import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls } from './Common'
+import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls, PopupContent } from './Common'
 import { ERROR_CODES, TRADE_TYPES, REDEEM_ADDRESS, TOKEN_ADDRESSES, amountFormatter, link } from '../utils'
 
 import IncrementToken from './IncrementToken'
