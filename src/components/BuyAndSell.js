@@ -6,7 +6,7 @@ import SelectToken from './SelectToken'
 import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls } from './Common'
 import IncrementToken from './IncrementToken'
 import { useAppContext } from '../context'
-import { ERROR_CODES, amountFormatter, TRADE_TYPES } from '../utils'
+import { ERROR_CODES, amountFormatter, TRADE_TYPES, link } from '../utils'
 import test from './Gallery/test.png'
 // import { ethers } from 'ethers'
 
@@ -76,7 +76,7 @@ export default function BuyAndSell({
   closeCheckout
 }) {
   const [state] = useAppContext()
-  const { account, setConnector } = useWeb3Context()
+  const { account, setConnector, networkId } = useWeb3Context()
 
   // function fake() {
   //   setCurrentTransaction(
@@ -94,10 +94,6 @@ export default function BuyAndSell({
   const [buyValidationState, setBuyValidationState] = useState({}) // { maximumInputValue, inputValue, outputValue }
   const [sellValidationState, setSellValidationState] = useState({}) // { inputValue, outputValue, minimumOutputValue }
   const [validationError, setValidationError] = useState()
-
-  function link(hash) {
-    return `https://etherscan.io/tx/${hash}`
-  }
 
   function getText(account, buying, errorMessage, ready, pending, hash) {
     if (account === null) {
@@ -222,7 +218,7 @@ export default function BuyAndSell({
             <i>Your transaction is pending.</i>
           </CheckoutPrompt>
           <CheckoutPrompt>
-            <EtherscanLink href={link(currentTransactionHash)} target="_blank" rel="noopener noreferrer">
+            <EtherscanLink href={link('etherscan', currentTransactionHash, networkId)} target="_blank" rel="noopener noreferrer">
               View on Etherscan.
             </EtherscanLink>
           </CheckoutPrompt>
@@ -246,7 +242,7 @@ export default function BuyAndSell({
           type={'cta'}
           pending={pending}
           onClick={() => {
-            unlock(buying).then(({ hash }) => {
+            unlock({ buying }).then(({ hash }) => {
               setCurrentTransaction(hash, TRADE_TYPES.UNLOCK, undefined)
             })
           }}

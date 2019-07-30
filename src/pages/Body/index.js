@@ -93,6 +93,7 @@ export default function Body({
   ready,
   unlock,
   validateBuy,
+  validateRedeem,
   buy,
   validateSell,
   sell,
@@ -112,11 +113,15 @@ export default function Body({
   const [state, setState] = useAppContext()
   const [showConnect, setShowConnect] = useState(false)
   const [showWorks, setShowWorks] = useState(false)
-  console.log(showWorks)
 
   return (
     <AppWrapper overlay={state.visible}>
-      <Header ready={ready} dollarPrice={dollarPrice} balanceSOCKSCLASSIC={balanceSOCKSCLASSIC} setShowConnect={setShowConnect} />
+      <Header
+        ready={ready}
+        dollarPrice={dollarPrice}
+        balanceSOCKSCLASSIC={balanceSOCKSCLASSIC}
+        setShowConnect={setShowConnect}
+      />
       <Content>
         <Card dollarPrice={dollarPrice} reserveSOCKSCLASSICToken={reserveSOCKSCLASSICToken} />{' '}
         <Info>
@@ -157,6 +162,7 @@ export default function Body({
         ready={ready}
         unlock={unlock}
         validateBuy={validateBuy}
+        validateRedeem={validateRedeem}
         buy={buy}
         validateSell={validateSell}
         sell={sell}

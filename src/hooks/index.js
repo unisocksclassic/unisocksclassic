@@ -4,12 +4,14 @@ import { useWeb3Context } from 'web3-react'
 import {
   isAddress,
   getTokenContract,
+  getRedeemContract,
   getExchangeContract,
   getTokenExchangeAddressFromFactory,
   getEtherBalance,
   getTokenBalance,
   getTokenAllowance,
-  TOKEN_ADDRESSES
+  TOKEN_ADDRESSES,
+  REDEEM_ADDRESS
 } from '../utils'
 
 export function useBlockEffect(functionToRun) {
@@ -38,6 +40,18 @@ export function useTokenContract(tokenAddress, withSignerIfPossible = true) {
       return null
     }
   }, [account, library, tokenAddress, withSignerIfPossible])
+}
+
+export function useRedeemContract(withSignerIfPossible = true) {
+  const { library, account } = useWeb3Context()
+
+  return useMemo(() => {
+    try {
+      return getRedeemContract(REDEEM_ADDRESS, library, withSignerIfPossible ? account : undefined)
+    } catch {
+      return null
+    }
+  }, [account, library, withSignerIfPossible])
 }
 
 export function useExchangeContract(tokenAddress, withSignerIfPossible = true) {
@@ -146,6 +160,8 @@ export function useAddressAllowance(address, tokenAddress, spenderAddress) {
   }, [updateAllowance])
 
   useBlockEffect(updateAllowance)
+  console.log('allawonc')
+  console.log(allowance)
 
   return allowance
 }

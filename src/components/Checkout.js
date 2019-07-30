@@ -65,6 +65,7 @@ export default function Checkout({
   ready,
   unlock,
   validateBuy,
+  validateRedeem,
   buy,
   validateSell,
   sell,
@@ -172,6 +173,7 @@ export default function Checkout({
         return (
           <Redeem
             ready={ready}
+            validateRedeem={validateRedeem}
             burn={burn}
             balanceSOCKSCLASSIC={balanceSOCKSCLASSIC}
             dollarize={dollarize}
@@ -179,6 +181,7 @@ export default function Checkout({
             setShowConnect={setShowConnect}
             closeCheckout={closeCheckout}
             pending={pending}
+            unlock={unlock}
           />
         )
       }

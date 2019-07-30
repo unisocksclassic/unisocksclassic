@@ -2,9 +2,10 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { useWeb3Context } from 'web3-react'
 import { ethers } from 'ethers'
 
-import { TOKEN_SYMBOLS, TOKEN_ADDRESSES, ERROR_CODES } from '../../utils'
+import { TOKEN_SYMBOLS, TOKEN_ADDRESSES, ERROR_CODES, REDEEM_ADDRESS, getTokenContract } from '../../utils'
 import {
   useTokenContract,
+  useRedeemContract,
   useExchangeContract,
   useAddressBalance,
   useAddressAllowance,
@@ -87,7 +88,11 @@ function calculateAmount(
 ) {
   // eth to token - buy
   if (inputTokenSymbol === TOKEN_SYMBOLS.ETH && outputTokenSymbol === TOKEN_SYMBOLS.SOCKSCLASSIC) {
-    const amount = calculateEtherTokenInputFromOutput(SOCKSCLASSICAmount, reserveSOCKSCLASSICETH, reserveSOCKSCLASSICToken)
+    const amount = calculateEtherTokenInputFromOutput(
+      SOCKSCLASSICAmount,
+      reserveSOCKSCLASSICETH,
+      reserveSOCKSCLASSICToken
+    )
     if (amount.lte(ethers.constants.Zero) || amount.gte(ethers.constants.MaxUint256)) {
       throw Error()
     }
@@ -96,7 +101,11 @@ function calculateAmount(
 
   // token to eth - sell
   if (inputTokenSymbol === TOKEN_SYMBOLS.SOCKSCLASSIC && outputTokenSymbol === TOKEN_SYMBOLS.ETH) {
-    const amount = calculateEtherTokenOutputFromInput(SOCKSCLASSICAmount, reserveSOCKSCLASSICToken, reserveSOCKSCLASSICETH)
+    const amount = calculateEtherTokenOutputFromInput(
+      SOCKSCLASSICAmount,
+      reserveSOCKSCLASSICToken,
+      reserveSOCKSCLASSICETH
+    )
     if (amount.lte(ethers.constants.Zero) || amount.gte(ethers.constants.MaxUint256)) {
       throw Error()
     }
@@ -109,7 +118,11 @@ function calculateAmount(
 
   if (buyingSOCKSCLASSIC) {
     // eth needed to buy x socks
-    const intermediateValue = calculateEtherTokenInputFromOutput(SOCKSCLASSICAmount, reserveSOCKSCLASSICETH, reserveSOCKSCLASSICToken)
+    const intermediateValue = calculateEtherTokenInputFromOutput(
+      SOCKSCLASSICAmount,
+      reserveSOCKSCLASSICETH,
+      reserveSOCKSCLASSICToken
+    )
     // calculateEtherTokenOutputFromInput
     if (intermediateValue.lte(ethers.constants.Zero) || intermediateValue.gte(ethers.constants.MaxUint256)) {
       throw Error()
@@ -126,7 +139,11 @@ function calculateAmount(
     return amount
   } else {
     // eth gained from selling x socks
-    const intermediateValue = calculateEtherTokenOutputFromInput(SOCKSCLASSICAmount, reserveSOCKSCLASSICToken, reserveSOCKSCLASSICETH)
+    const intermediateValue = calculateEtherTokenOutputFromInput(
+      SOCKSCLASSICAmount,
+      reserveSOCKSCLASSICToken,
+      reserveSOCKSCLASSICETH
+    )
     if (intermediateValue.lte(ethers.constants.Zero) || intermediateValue.gte(ethers.constants.MaxUint256)) {
       throw Error()
     }
@@ -158,6 +175,8 @@ export default function Main() {
   const tokenContractSOCKSCLASSIC = useTokenContract(TOKEN_ADDRESSES.SOCKSCLASSIC)
   const tokenContractSelectedToken = useTokenContract(TOKEN_ADDRESSES[selectedTokenSymbol])
 
+  const redeemContract = useRedeemContract()
+
   // get balances
   const balanceETH = useAddressBalance(account, TOKEN_ADDRESSES.ETH)
   const balanceSOCKSCLASSIC = useAddressBalance(account, TOKEN_ADDRESSES.SOCKSCLASSIC)
@@ -169,10 +188,14 @@ export default function Main() {
     TOKEN_ADDRESSES.SOCKSCLASSIC,
     exchangeContractSOCKSCLASSIC && exchangeContractSOCKSCLASSIC.address
   )
+  const allowanceRedeemSOCKSCLASSIC = useAddressAllowance(account, TOKEN_ADDRESSES.SOCKSCLASSIC, REDEEM_ADDRESS)
   const allowanceSelectedToken = useExchangeAllowance(account, TOKEN_ADDRESSES[selectedTokenSymbol])
 
   // get reserves
-  const reserveSOCKSCLASSICETH = useAddressBalance(exchangeContractSOCKSCLASSIC && exchangeContractSOCKSCLASSIC.address, TOKEN_ADDRESSES.ETH)
+  const reserveSOCKSCLASSICETH = useAddressBalance(
+    exchangeContractSOCKSCLASSIC && exchangeContractSOCKSCLASSIC.address,
+    TOKEN_ADDRESSES.ETH
+  )
   const reserveSOCKSCLASSICToken = useAddressBalance(
     exchangeContractSOCKSCLASSIC && exchangeContractSOCKSCLASSIC.address,
     TOKEN_ADDRESSES.SOCKSCLASSIC
@@ -248,16 +271,26 @@ export default function Main() {
     }
   }, [USDExchangeRateETH, reserveSOCKSCLASSICETH, reserveSOCKSCLASSICToken])
 
-  async function unlock(buyingSOCKSCLASSIC = true) {
-    const contract = buyingSOCKSCLASSIC ? tokenContractSelectedToken : tokenContractSOCKSCLASSIC
-    const spenderAddress = buyingSOCKSCLASSIC ? exchangeContractSelectedToken.address : exchangeContractSOCKSCLASSIC.address
+  async function unlock({ address = null, token = null, amount = 0, buying: buyingSOCKSCLASSIC = true }) {
+    const contract = token
+      ? getTokenContract(token, library, account)
+      : buyingSOCKSCLASSIC
+      ? tokenContractSelectedToken
+      : tokenContractSOCKSCLASSIC
+    const spenderAddress = address
+      ? address
+      : buyingSOCKSCLASSIC
+      ? exchangeContractSelectedToken.address
+      : exchangeContractSOCKSCLASSIC.address
 
-    const estimatedGasLimit = await contract.estimate.approve(spenderAddress, ethers.constants.MaxUint256)
+    const realAmount = amount !== 0 ? amount : ethers.constants.MaxUint256
+
+    const estimatedGasLimit = await contract.estimate.approve(spenderAddress, realAmount)
     const estimatedGasPrice = await library
       .getGasPrice()
       .then(gasPrice => gasPrice.mul(ethers.utils.bigNumberify(150)).div(ethers.utils.bigNumberify(100)))
 
-    return contract.approve(spenderAddress, ethers.constants.MaxUint256, {
+    return contract.approve(spenderAddress, realAmount, {
       gasLimit: calculateGasMargin(estimatedGasLimit, GAS_MARGIN),
       gasPrice: estimatedGasPrice
     })
@@ -352,9 +385,13 @@ export default function Main() {
       .then(gasPrice => gasPrice.mul(ethers.utils.bigNumberify(150)).div(ethers.utils.bigNumberify(100)))
 
     if (selectedTokenSymbol === TOKEN_SYMBOLS.ETH) {
-      const estimatedGasLimit = await exchangeContractSOCKSCLASSIC.estimate.ethToTokenSwapOutput(outputValue, deadline, {
-        value: maximumInputValue
-      })
+      const estimatedGasLimit = await exchangeContractSOCKSCLASSIC.estimate.ethToTokenSwapOutput(
+        outputValue,
+        deadline,
+        {
+          value: maximumInputValue
+        }
+      )
       return exchangeContractSOCKSCLASSIC.ethToTokenSwapOutput(outputValue, deadline, {
         value: maximumInputValue,
         gasLimit: calculateGasMargin(estimatedGasLimit, GAS_MARGIN),
@@ -462,6 +499,56 @@ export default function Main() {
     ]
   )
 
+  // redeem functionality
+  const validateRedeem = useCallback(
+    numberOfSOCKSCLASSIC => {
+      // validate passed amount
+      let parsedValue
+      try {
+        parsedValue = ethers.utils.parseUnits(numberOfSOCKSCLASSIC, 18)
+      } catch (error) {
+        error.code = ERROR_CODES.INVALID_AMOUNT
+        throw error
+      }
+
+      // the following are 'non-breaking' errors that will still return the data
+      let errorAccumulator
+      // validate minimum ether balance
+      if (balanceETH.lt(ethers.utils.parseEther('.01'))) {
+        const error = Error()
+        error.code = ERROR_CODES.INSUFFICIENT_ETH_GAS
+        if (!errorAccumulator) {
+          errorAccumulator = error
+        }
+      }
+
+      // validate minimum socks balance
+      if (balanceSOCKSCLASSIC.lt(parsedValue)) {
+        const error = Error()
+        error.code = ERROR_CODES.INSUFFICIENT_SELECTED_TOKEN_BALANCE
+        if (!errorAccumulator) {
+          errorAccumulator = error
+        }
+      }
+
+      // validate allowance
+      if (allowanceRedeemSOCKSCLASSIC.lt(parsedValue)) {
+        const error = Error()
+        error.code = ERROR_CODES.INSUFFICIENT_ALLOWANCE
+        if (!errorAccumulator) {
+          errorAccumulator = error
+        }
+      }
+
+      return {
+        inputValue: parsedValue,
+        outputValue: parsedValue,
+        error: errorAccumulator
+      }
+    },
+    [allowanceRedeemSOCKSCLASSIC, balanceETH, balanceSOCKSCLASSIC]
+  )
+
   async function sell(inputValue, minimumOutputValue) {
     const deadline = Math.ceil(Date.now() / 1000) + DEADLINE_FROM_NOW
 
@@ -502,15 +589,13 @@ export default function Main() {
   }
 
   async function burn(amount) {
-    const parsedAmount = ethers.utils.parseUnits(amount, 18)
-
     const estimatedGasPrice = await library
       .getGasPrice()
       .then(gasPrice => gasPrice.mul(ethers.utils.bigNumberify(150)).div(ethers.utils.bigNumberify(100)))
 
-    const estimatedGasLimit = await tokenContractSOCKSCLASSIC.estimate.burn(parsedAmount)
+    const estimatedGasLimit = await redeemContract.estimate.redeem(amount)
 
-    return tokenContractSOCKSCLASSIC.burn(parsedAmount, {
+    return redeemContract.redeem(amount, {
       gasLimit: calculateGasMargin(estimatedGasLimit, GAS_MARGIN),
       gasPrice: estimatedGasPrice
     })
@@ -523,6 +608,7 @@ export default function Main() {
       ready={ready}
       unlock={unlock}
       validateBuy={validateBuy}
+      validateRedeem={validateRedeem}
       buy={buy}
       validateSell={validateSell}
       sell={sell}

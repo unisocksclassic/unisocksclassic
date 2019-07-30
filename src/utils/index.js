@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 import ERC20_ABI from './erc20.json'
 import EXCHANGE_ABI from './exchange.json'
 import FACTORY_ABI from './factory.json'
+import REDEEM_ABI from './redeem.json'
 
 import UncheckedJsonRpcSigner from './signer'
 
@@ -30,6 +31,9 @@ export const TOKEN_ADDRESSES = {
   TUSD: '0x8dd5fbCe2F6a956C3022bA3663759011Dd51e73E',
   ZRX: '0xE41d2489571d322189246DaFA5ebDe1F4699F498'
 }
+
+// Rinkeby
+export const REDEEM_ADDRESS = '0x3c2f192ee7faad7a8818d2611ce4c9a676b77e7f'
 
 export const TOKEN_SYMBOLS = Object.keys(TOKEN_ADDRESSES).reduce((o, k) => {
   o[k] = k
@@ -61,6 +65,17 @@ export function isAddress(value) {
   }
 }
 
+export function link(service, suffix, networkId = 4) {
+  let url = `https://${networkId === 4 ? 'rinkeby.' : ''}${service}.io/`
+  if (service === 'etherscan')
+    url += 'tx/'
+  if (service === 'opensea')
+    url += 'accounts/'
+  url += suffix
+
+  return url
+}
+
 // account is optional
 export function getProviderOrSigner(library, account) {
   return account ? new UncheckedJsonRpcSigner(library.getSigner(account)) : library
@@ -73,6 +88,10 @@ export function getContract(address, ABI, library, account) {
   }
 
   return new ethers.Contract(address, ABI, getProviderOrSigner(library, account))
+}
+
+export function getRedeemContract(redeemAddress, library, account) {
+  return getContract(redeemAddress, REDEEM_ABI, library, account)
 }
 
 export function getTokenContract(tokenAddress, library, account) {
