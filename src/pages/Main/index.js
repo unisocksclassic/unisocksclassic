@@ -271,7 +271,7 @@ export default function Main() {
     }
   }, [USDExchangeRateETH, reserveSOCKSCLASSICETH, reserveSOCKSCLASSICToken])
 
-  async function unlock({ address = null, token = null, buying: buyingSOCKSCLASSIC = true }) {
+  async function unlock({ address = null, token = null, amount = 0, buying: buyingSOCKSCLASSIC = true }) {
     const contract = token
       ? getTokenContract(token, library, account)
       : buyingSOCKSCLASSIC
@@ -283,12 +283,14 @@ export default function Main() {
       ? exchangeContractSelectedToken.address
       : exchangeContractSOCKSCLASSIC.address
 
-    const estimatedGasLimit = await contract.estimate.approve(spenderAddress, ethers.constants.MaxUint256)
+    const realAmount = amount !== 0 ? amount : ethers.constants.MaxUint256
+
+    const estimatedGasLimit = await contract.estimate.approve(spenderAddress, realAmount)
     const estimatedGasPrice = await library
       .getGasPrice()
       .then(gasPrice => gasPrice.mul(ethers.utils.bigNumberify(150)).div(ethers.utils.bigNumberify(100)))
 
-    return contract.approve(spenderAddress, ethers.constants.MaxUint256, {
+    return contract.approve(spenderAddress, realAmount, {
       gasLimit: calculateGasMargin(estimatedGasLimit, GAS_MARGIN),
       gasPrice: estimatedGasPrice
     })

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { ethers } from 'ethers'
 import { useWeb3Context } from 'web3-react'
 
 import { useAppContext } from '../context'
@@ -225,7 +226,11 @@ export default function Redeem({
               type={'cta'}
               pending={pending}
               onClick={() => {
-                unlock({ address: REDEEM_ADDRESS, token: TOKEN_ADDRESSES.SOCKSCLASSIC }).then(({ hash }) => {
+                unlock({
+                  address: REDEEM_ADDRESS,
+                  amount: ethers.utils.parseUnits(String(state.count), 18),
+                  token: TOKEN_ADDRESSES.SOCKSCLASSIC
+                }).then(({ hash }) => {
                   setCurrentTransaction(hash, TRADE_TYPES.UNLOCK, undefined)
                 })
               }}
