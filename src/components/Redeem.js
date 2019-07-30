@@ -5,7 +5,7 @@ import { useWeb3Context } from 'web3-react'
 import { useAppContext } from '../context'
 import RedeemForm from './RedeemForm'
 import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls } from './Common'
-import { ERROR_CODES, TRADE_TYPES, REDEEM_ADDRESS, TOKEN_ADDRESSES, IS_MAINNET, amountFormatter} from '../utils'
+import { ERROR_CODES, TRADE_TYPES, REDEEM_ADDRESS, TOKEN_ADDRESSES, amountFormatter, link } from '../utils'
 
 import IncrementToken from './IncrementToken'
 import test from './Gallery/test.png'
@@ -77,7 +77,7 @@ export default function Redeem({
   setShowConnect,
   closeCheckout
 }) {
-  const { library, account, setConnector } = useWeb3Context()
+  const { library, account, setConnector, networkId } = useWeb3Context()
   const [state] = useAppContext()
 
   const [numberBurned, setNumberBurned] = useState()
@@ -123,14 +123,6 @@ export default function Redeem({
   const shouldRenderUnlock = validationError && validationError.code === ERROR_CODES.INSUFFICIENT_ALLOWANCE
 
   const errorMessage = getValidationErrorMessage(validationError)
-
-  function link(hash) {
-    return `https://etherscan.io/tx/${hash}`
-  }
-
-  function openseaLink(account, isMainnet=IS_MAINNET) {
-    return `https://${isMainnet ? "" : "rinkeby."}opensea.io/accounts/${account}`
-  }
 
   function getText(account, errorMessage, pending, amount) {
     if (account === null) {
@@ -261,7 +253,7 @@ export default function Redeem({
           <Shim />
           <Back disabled={!!pending}>
             {pending ? (
-              <EtherscanLink href={link(transactionHash)} target="_blank" rel="noopener noreferrer">
+              <EtherscanLink href={link('etherscan', transactionHash, networkId)} target="_blank" rel="noopener noreferrer">
                 View on Etherscan.
               </EtherscanLink>
             ) : (
@@ -293,10 +285,10 @@ export default function Redeem({
           </CheckoutPrompt>
           <CheckoutPrompt>Your shipping details will be available soon.</CheckoutPrompt>
           <div style={{ margin: '16px 0 16px 16px' }}>
-            {/* <EtherscanLink href={link(lastTransactionHash)} target="_blank" rel="noopener noreferrer">
+            {/* <EtherscanLink href={link('etherscan', transactionHash, networkId)} target="_blank" rel="noopener noreferrer">
               View on Etherscan.
             </EtherscanLink> */}
-            <EtherscanLink href={openseaLink(account, IS_MAINNET)} target="_blank" rel="noopener noreferrer">
+            <EtherscanLink href={link('opensea', account, networkId)} target="_blank" rel="noopener noreferrer">
               View on OpenSea.
             </EtherscanLink>
           </div>

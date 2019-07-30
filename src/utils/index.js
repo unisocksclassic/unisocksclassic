@@ -35,8 +35,6 @@ export const TOKEN_ADDRESSES = {
 // Rinkeby
 export const REDEEM_ADDRESS = '0x3c2f192ee7faad7a8818d2611ce4c9a676b77e7f'
 
-export const IS_MAINNET = (REDEEM_ADDRESS === '0x3c2f192ee7faad7a8818d2611ce4c9a676b77e7f' ? false : true)
-
 export const TOKEN_SYMBOLS = Object.keys(TOKEN_ADDRESSES).reduce((o, k) => {
   o[k] = k
   return o
@@ -65,6 +63,17 @@ export function isAddress(value) {
   } catch {
     return false
   }
+}
+
+export function link(service, suffix, networkId = 4) {
+  let url = `https://${networkId === 4 ? 'rinkeby.' : ''}${service}.io/`
+  if (service === 'etherscan')
+    url += 'tx/'
+  if (service === 'opensea')
+    url += 'accounts/'
+  url += suffix
+
+  return url
 }
 
 // account is optional
