@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { ethers } from 'ethers'
 import { useWeb3Context } from 'web3-react'
 
 import { useAppContext } from '../context'
 import RedeemForm from './RedeemForm'
 import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls } from './Common'
-import { ERROR_CODES, TRADE_TYPES, REDEEM_ADDRESS, TOKEN_ADDRESSES, IS_MAINNET, amountFormatter} from '../utils'
+import { ERROR_CODES, TRADE_TYPES, REDEEM_ADDRESS, TOKEN_ADDRESSES, IS_MAINNET, amountFormatter } from '../utils'
 
 import IncrementToken from './IncrementToken'
 import test from './Gallery/test.png'
@@ -128,8 +129,8 @@ export default function Redeem({
     return `https://etherscan.io/tx/${hash}`
   }
 
-  function openseaLink(account, isMainnet=IS_MAINNET) {
-    return `https://${isMainnet ? "" : "rinkeby."}opensea.io/accounts/${account}`
+  function openseaLink(account, isMainnet = IS_MAINNET) {
+    return `https://${isMainnet ? '' : 'rinkeby.'}opensea.io/accounts/${account}`
   }
 
   function getText(account, errorMessage, pending, amount) {
@@ -233,7 +234,11 @@ export default function Redeem({
               type={'cta'}
               pending={pending}
               onClick={() => {
-                unlock({ address: REDEEM_ADDRESS, token: TOKEN_ADDRESSES.SOCKSCLASSIC }).then(({ hash }) => {
+                unlock({
+                  address: REDEEM_ADDRESS,
+                  amount: ethers.utils.parseUnits(String(state.count), 18),
+                  token: TOKEN_ADDRESSES.SOCKSCLASSIC
+                }).then(({ hash }) => {
                   setCurrentTransaction(hash, TRADE_TYPES.UNLOCK, undefined)
                 })
               }}
