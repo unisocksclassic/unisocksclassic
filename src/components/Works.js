@@ -27,10 +27,6 @@ const Desc = styled.p`
   font-weight: 500;
 `
 
-export function link(hash) {
-  return `https://etherscan.io/tx/${hash}`
-}
-
 export const EtherscanLink = styled.a`
   text-decoration: none;
   color: ${props => props.theme.uniswapPink};
