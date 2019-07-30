@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useWeb3Context } from 'web3-react'
 
 import { amountFormatter, TRADE_TYPES, link } from '../utils'
-import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls } from './Common'
+import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls, PopupContent } from './Common'
 
 import sent from './Gallery/test.png'
 import { useAppContext } from '../context'
@@ -23,12 +23,14 @@ export default function Confirmed({ hash, type, amount, clearLastTransaction, cl
       <ConfirmedFrame>
         <TopFrame>
           <Controls closeCheckout={closeCheckout} />
-          <ImgStyle src={sent} alt="Logo" />
-          <InfoFrame>
-            <Owned>
-              <p>Unlocked Token!</p>
-            </Owned>
-          </InfoFrame>
+          <PopupContent>
+            <ImgStyle src={sent} alt="Logo" />
+            <InfoFrame>
+              <Owned>
+                <p>Unlocked Token!</p>
+              </Owned>
+            </InfoFrame>
+          </PopupContent>
         </TopFrame>
         <CheckoutPrompt>
           <EtherscanLink href={link('etherscan', hash, networkId)} target="_blank" rel="noopener noreferrer">
@@ -42,12 +44,14 @@ export default function Confirmed({ hash, type, amount, clearLastTransaction, cl
       <ConfirmedFrame>
         <TopFrame>
           <Controls closeCheckout={closeCheckout} />
-          <ImgStyle src={sent} alt="Logo" />
-          <InfoFrame>
-            <Owned>
-              <p>{`You got ${amountFormatter(amount, 18, 0)} SOCKSCLASSIC!`}</p>
-            </Owned>
-          </InfoFrame>
+          <PopupContent>
+            <ImgStyle src={sent} alt="Logo" />
+            <InfoFrame>
+              <Owned>
+                <p>{`You got ${amountFormatter(amount, 18, 0)} SOCKSCLASSIC!`}</p>
+              </Owned>
+            </InfoFrame>
+          </PopupContent>
         </TopFrame>
         <CheckoutPrompt>
           <EtherscanLink href={link('etherscan', hash, networkId)} target="_blank" rel="noopener noreferrer">
@@ -72,12 +76,14 @@ export default function Confirmed({ hash, type, amount, clearLastTransaction, cl
       <ConfirmedFrame>
         <TopFrame>
           <Controls closeCheckout={closeCheckout} />
-          <ImgStyle src={sent} alt="Logo" />
-          <InfoFrame>
-            <Owned>
-              <p>You sold SOCKSCLASSIC!</p>
-            </Owned>
-          </InfoFrame>
+          <PopupContent>
+            <ImgStyle src={sent} alt="Logo" />
+            <InfoFrame>
+              <Owned>
+                <p>You sold SOCKSCLASSIC!</p>
+              </Owned>
+            </InfoFrame>
+          </PopupContent>
         </TopFrame>
         <CheckoutPrompt>
           <EtherscanLink href={link('etherscan', hash, networkId)} target="_blank" rel="noopener noreferrer">
@@ -119,8 +125,11 @@ const Owned = styled.div`
 `
 
 const ImgStyle = styled.img`
-  width: 300px;
-  padding: 0px;
+  display: flex;
+  width: auto;
+  max-width: 70%;
+  max-height: 50vh;
+  padding: 2rem 0 2rem 0;
   box-sizing: border-box;
 `
 
