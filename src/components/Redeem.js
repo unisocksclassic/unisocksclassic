@@ -5,7 +5,7 @@ import { useWeb3Context } from 'web3-react'
 import { useAppContext } from '../context'
 import RedeemForm from './RedeemForm'
 import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls } from './Common'
-import { ERROR_CODES, TRADE_TYPES, REDEEM_ADDRESS, TOKEN_ADDRESSES, amountFormatter } from '../utils'
+import { ERROR_CODES, TRADE_TYPES, REDEEM_ADDRESS, TOKEN_ADDRESSES, IS_MAINNET, amountFormatter} from '../utils'
 
 import IncrementToken from './IncrementToken'
 import test from './Gallery/test.png'
@@ -126,6 +126,10 @@ export default function Redeem({
 
   function link(hash) {
     return `https://etherscan.io/tx/${hash}`
+  }
+
+  function openseaLink(account, isMainnet=IS_MAINNET) {
+    return `https://${isMainnet ? "" : "rinkeby."}opensea.io/accounts/${account}`
   }
 
   function getText(account, errorMessage, pending, amount) {
@@ -289,8 +293,11 @@ export default function Redeem({
           </CheckoutPrompt>
           <CheckoutPrompt>Your shipping details will be available soon.</CheckoutPrompt>
           <div style={{ margin: '16px 0 16px 16px' }}>
-            <EtherscanLink href={link(lastTransactionHash)} target="_blank" rel="noopener noreferrer">
+            {/* <EtherscanLink href={link(lastTransactionHash)} target="_blank" rel="noopener noreferrer">
               View on Etherscan.
+            </EtherscanLink> */}
+            <EtherscanLink href={openseaLink(account, IS_MAINNET)} target="_blank" rel="noopener noreferrer">
+              View on OpenSea.
             </EtherscanLink>
           </div>
         </ConfirmedFrame>

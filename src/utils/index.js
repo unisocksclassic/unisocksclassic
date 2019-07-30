@@ -35,6 +35,8 @@ export const TOKEN_ADDRESSES = {
 // Rinkeby
 export const REDEEM_ADDRESS = '0x3c2f192ee7faad7a8818d2611ce4c9a676b77e7f'
 
+export const IS_MAINNET = (REDEEM_ADDRESS == '0x3c2f192ee7faad7a8818d2611ce4c9a676b77e7f' ? false : true)
+
 export const TOKEN_SYMBOLS = Object.keys(TOKEN_ADDRESSES).reduce((o, k) => {
   o[k] = k
   return o
