@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useWeb3Context } from 'web3-react'
 
 import SelectToken from './SelectToken'
-import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls } from './Common'
+import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls, PopupContent } from './Common'
 import IncrementToken from './IncrementToken'
 import { useAppContext } from '../context'
 import { ERROR_CODES, amountFormatter, TRADE_TYPES } from '../utils'
@@ -204,17 +204,19 @@ export default function BuyAndSell({
     <ConfirmedFrame>
       <TopFrame>
         <Controls closeCheckout={closeCheckout} />
-        <ImgStyle src={test} alt="Logo" />
-        <InfoFrame pending={pending}>
-          <CurrentPrice>
-            {/* {dollarPrice && `$${amountFormatter(dollarPrice, 18, 2)} USD`} */}
-            <USDPrice>{renderFormData()}</USDPrice>
-            <SockCount>
-              {reserveSOCKSCLASSICToken && `${amountFormatter(reserveSOCKSCLASSICToken, 18, 0)}/500 available`}
-            </SockCount>
-          </CurrentPrice>
-          <IncrementToken />
-        </InfoFrame>
+        <PopupContent>
+          <ImgStyle src={test} alt="Logo" />
+          <InfoFrame pending={pending}>
+            <CurrentPrice>
+              {/* {dollarPrice && `$${amountFormatter(dollarPrice, 18, 2)} USD`} */}
+              <USDPrice>{renderFormData()}</USDPrice>
+              <SockCount>
+                {reserveSOCKSCLASSICToken && `${amountFormatter(reserveSOCKSCLASSICToken, 18, 0)}/500 available`}
+              </SockCount>
+            </CurrentPrice>
+            <IncrementToken />
+          </InfoFrame>
+        </PopupContent>
       </TopFrame>
       {pending && currentTransactionHash ? (
         <CheckoutControls buying={buying}>
@@ -301,7 +303,10 @@ const InfoFrame = styled.div`
 `
 
 const ImgStyle = styled.img`
-  width: 225px;
+  display: flex;
+  width: auto;
+  max-width: 70%;
+  max-height: 50vh;
   padding: 2rem 0 2rem 0;
   box-sizing: border-box;
 `

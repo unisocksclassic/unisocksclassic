@@ -5,7 +5,7 @@ import { useWeb3Context } from 'web3-react'
 
 import { useAppContext } from '../context'
 import RedeemForm from './RedeemForm'
-import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls } from './Common'
+import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls, PopupContent } from './Common'
 import { ERROR_CODES, TRADE_TYPES, REDEEM_ADDRESS, TOKEN_ADDRESSES, IS_MAINNET, amountFormatter } from '../utils'
 
 import IncrementToken from './IncrementToken'
@@ -167,17 +167,21 @@ export default function Redeem({
         <ConfirmedFrame>
           <TopFrame hasPickedAmount={hasPickedAmount}>
             <RedeemControls closeCheckout={closeCheckout} />
-            <ImgStyle src={test} alt="Logo" hasPickedAmount={hasPickedAmount} />
-            <InfoFrame pending={pending}>
-              <Owned>
-                <SockCount>You own {balanceSOCKSCLASSIC && `${amountFormatter(balanceSOCKSCLASSIC, 18, 0)}`}</SockCount>
-                <p>Redeem SOCKSCLASSIC</p>
-              </Owned>
-              <IncrementToken
-                initialValue={Number(amountFormatter(balanceSOCKSCLASSIC, 18, 0))}
-                max={Number(amountFormatter(balanceSOCKSCLASSIC, 18, 0))}
-              />
-            </InfoFrame>
+            <PopupContent>
+              <ImgStyle src={test} alt="Logo" hasPickedAmount={hasPickedAmount} />
+              <InfoFrame pending={pending}>
+                <Owned>
+                  <SockCount>
+                    You own {balanceSOCKSCLASSIC && `${amountFormatter(balanceSOCKSCLASSIC, 18, 0)}`}
+                  </SockCount>
+                  <p>Redeem SOCKSCLASSIC</p>
+                </Owned>
+                <IncrementToken
+                  initialValue={Number(amountFormatter(balanceSOCKSCLASSIC, 18, 0))}
+                  max={Math.min(Number(amountFormatter(balanceSOCKSCLASSIC, 18, 0)), 50)}
+                />
+              </InfoFrame>
+            </PopupContent>
           </TopFrame>
           <Shim />
           <ButtonFrame
@@ -333,7 +337,7 @@ const InfoFrame = styled.div`
   align-items: flex-end;
   padding: ${props => (props.hasPickedAmount ? '1rem 0 1rem 0' : ' 0')};
   /* padding: 1rem 0 1rem 0; */
-  margin-top: 12px;
+  margin-top: ${props => (props.hasPickedAmount ? '24px' : '12px')};
   /* margin-bottom: 8px; */
   /* margin-right: ${props => (props.hasPickedAmount ? '8px' : '0px')}; */
 
@@ -368,9 +372,13 @@ const Bonus = styled.div`
 `
 
 const ImgStyle = styled.img`
-  width: ${props => (props.hasPickedAmount ? (props.hasBurnt ? '300px' : '120px') : '300px')};
+  width: ${props => (props.hasPickedAmount ? (props.hasBurnt ? 'auto' : '120px') : 'auto')};
   padding: ${props => (props.hasPickedAmount ? (props.hasBurnt ? '0px' : '0 1rem 0 0') : '2rem 0 2rem 0')};
   box-sizing: border-box;
+
+  display: flex;
+  max-width: 70%;
+  max-height: 50vh;
 `
 const SockCount = styled.span`
   color: #aeaeae;
