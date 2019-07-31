@@ -22,7 +22,7 @@ export default function Confirmed({ hash, type, amount, clearLastTransaction, cl
     return (
       <ConfirmedFrame>
         <TopFrame>
-          <Controls closeCheckout={closeCheckout} />
+          <Controls closeCheckout={closeCheckout} children={"Unlock"} />
           <PopupContent>
             <ImgStyle src={sent} alt="Logo" />
             <InfoFrame>
@@ -43,7 +43,7 @@ export default function Confirmed({ hash, type, amount, clearLastTransaction, cl
     return (
       <ConfirmedFrame>
         <TopFrame>
-          <Controls closeCheckout={closeCheckout} />
+          <Controls closeCheckout={closeCheckout} children={"Buy"} />
           <PopupContent>
             <ImgStyle src={sent} alt="Logo" />
             <InfoFrame>
@@ -75,7 +75,7 @@ export default function Confirmed({ hash, type, amount, clearLastTransaction, cl
     return (
       <ConfirmedFrame>
         <TopFrame>
-          <Controls closeCheckout={closeCheckout} />
+          <Controls closeCheckout={closeCheckout} children={"Sell"}/>
           <PopupContent>
             <ImgStyle src={sent} alt="Logo" />
             <InfoFrame>

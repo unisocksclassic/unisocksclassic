@@ -31,7 +31,7 @@ const config = {
 export function RedeemControls({ closeCheckout, theme, type }) {
   return (
     <Controls theme={theme} closeCheckout={closeCheckout}>
-      Pay{' '}
+      Redeem{' '}
       <span style={{ color: '#737373' }}>
         {type === 'confirm' ? ' / Order Details' : type === 'shipping' ? ' / Shipping Details' : ''}
       </span>

@@ -199,7 +199,7 @@ export default function BuyAndSell({
   return (
     <ConfirmedFrame>
       <TopFrame>
-        <Controls closeCheckout={closeCheckout} />
+        <Controls closeCheckout={closeCheckout} children={buying ? "Buy" : "Sell"} />
         <PopupContent>
           <ImgStyle src={test} alt="Logo" />
           <InfoFrame pending={pending}>

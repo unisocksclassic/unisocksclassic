@@ -43,7 +43,7 @@ export const ScrollableContent = styled.div`
 export default function Works({ closeCheckout }) {
   return (
     <WorksFrame>
-      <Controls closeCheckout={closeCheckout} theme={'dark'} />
+      <Controls closeCheckout={closeCheckout} theme={'dark'} children={"About"}/>
 
       <ScrollableContent>
         <Title>How it works:</Title>
