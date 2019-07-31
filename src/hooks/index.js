@@ -160,8 +160,6 @@ export function useAddressAllowance(address, tokenAddress, spenderAddress) {
   }, [updateAllowance])
 
   useBlockEffect(updateAllowance)
-  console.log('allawonc')
-  console.log(allowance)
 
   return allowance
 }
