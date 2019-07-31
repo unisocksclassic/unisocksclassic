@@ -197,6 +197,7 @@ const AppWrapper = styled.div`
   overflow: ${props => (props.overlay ? 'hidden' : 'scroll')};
   scroll-behavior: smooth;
   position: ${props => (props.overlay ? 'fixed' : 'initial')};
+  scrollbar-width: none;
 `
 
 const Content = styled.div`
