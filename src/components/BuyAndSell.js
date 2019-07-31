@@ -200,7 +200,7 @@ export default function BuyAndSell({
     <ConfirmedFrame>
       <TopFrame>
         <Controls closeCheckout={closeCheckout}>
-          {buying ? "Buy" : "Sell"} 
+          {buying ? "Buy" : "Sell"}
         </Controls>
         <PopupContent>
           <ImgStyle src={test} alt="Logo" />

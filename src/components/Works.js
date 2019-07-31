@@ -44,9 +44,8 @@ export default function Works({ closeCheckout }) {
   return (
     <WorksFrame>
       <Controls closeCheckout={closeCheckout} theme={'dark'} >
-        {"About"}
+        About
       </Controls>
-
 
       <ScrollableContent>
         <Title>How it works:</Title>
