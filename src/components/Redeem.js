@@ -4,7 +4,6 @@ import { ethers } from 'ethers'
 import { useWeb3Context } from 'web3-react'
 
 import { useAppContext } from '../context'
-import RedeemForm from './RedeemForm'
 import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls, PopupContent } from './Common'
 import { ERROR_CODES, TRADE_TYPES, REDEEM_ADDRESS, TOKEN_ADDRESSES, amountFormatter, link } from '../utils'
 
@@ -416,10 +415,6 @@ const CheckoutPrompt = styled.p`
   text-align: left;
   color: '#000';
   font-style: italic;
-  width: 100%;
-`
-
-const RedeemFrame = styled(RedeemForm)`
   width: 100%;
 `
 
