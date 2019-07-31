@@ -220,7 +220,11 @@ export default function BuyAndSell({
             <i>Your transaction is pending.</i>
           </CheckoutPrompt>
           <CheckoutPrompt>
-            <EtherscanLink href={link('etherscan', currentTransactionHash, networkId)} target="_blank" rel="noopener noreferrer">
+            <EtherscanLink
+              href={link('etherscan', currentTransactionHash, networkId)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               View on Etherscan.
             </EtherscanLink>
           </CheckoutPrompt>
@@ -341,7 +345,6 @@ const CheckoutPrompt = styled.p`
   font-weight: 500;
   font-size: 14px;
   margin-bottom: 0;
-  margin-left: 8px;
   text-align: left;
   width: 100%;
 `
