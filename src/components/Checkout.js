@@ -249,6 +249,8 @@ const CheckoutFrame = styled.div`
     // -webkit-transform: translateX(-50%) translateY(-50%);
     // -ms-transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%) translateY(-50%);
+    max-height: 95%;
+    overflow: hidden;
     // width: 100%;
   }
 

@@ -27,7 +27,7 @@ export const TopFrame = styled.div`
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.4);
   border-radius: 8px;
   color: white;
-  display: flex;
+  // display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -66,6 +66,9 @@ const FrameControls = styled.div`
   justify-content: space-between;
   width: 100%;
   align-items: center;
+  margin: ${({ theme }) => (theme === 'dark' ? '-16px -16px 0px -16px' : '-24px -24px -40px -24px')};
+  padding: ${({ theme }) => (theme === 'dark' ? '16px' : '24px')};
+  background: ${({ theme }) => (theme === 'dark' ? '#fff' : 'none')};
 `
 
 const Unicorn = styled.p`
@@ -77,7 +80,7 @@ const Unicorn = styled.p`
 
 export function Controls({ closeCheckout, theme, children = 'Pay' }) {
   return (
-    <FrameControls>
+    <FrameControls theme={theme}>
       <Unicorn theme={theme}>
         <span role="img" aria-label="unicorn">
           🦄
@@ -88,3 +91,13 @@ export function Controls({ closeCheckout, theme, children = 'Pay' }) {
     </FrameControls>
   )
 }
+
+export const PopupContent = styled.div`
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0px;
+}
+`

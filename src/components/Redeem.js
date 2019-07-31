@@ -5,7 +5,7 @@ import { useWeb3Context } from 'web3-react'
 
 import { useAppContext } from '../context'
 import RedeemForm from './RedeemForm'
-import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls } from './Common'
+import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls, PopupContent } from './Common'
 import { ERROR_CODES, TRADE_TYPES, REDEEM_ADDRESS, TOKEN_ADDRESSES, amountFormatter, link } from '../utils'
 
 import IncrementToken from './IncrementToken'
@@ -159,17 +159,21 @@ export default function Redeem({
         <ConfirmedFrame>
           <TopFrame hasPickedAmount={hasPickedAmount}>
             <RedeemControls closeCheckout={closeCheckout} />
-            <ImgStyle src={test} alt="Logo" hasPickedAmount={hasPickedAmount} />
-            <InfoFrame pending={pending}>
-              <Owned>
-                <SockCount>You own {balanceSOCKSCLASSIC && `${amountFormatter(balanceSOCKSCLASSIC, 18, 0)}`}</SockCount>
-                <p>Redeem SOCKSCLASSIC</p>
-              </Owned>
-              <IncrementToken
-                initialValue={Number(amountFormatter(balanceSOCKSCLASSIC, 18, 0))}
-                max={Number(amountFormatter(balanceSOCKSCLASSIC, 18, 0))}
-              />
-            </InfoFrame>
+            <PopupContent>
+              <ImgStyle src={test} alt="Logo" hasPickedAmount={hasPickedAmount} />
+              <InfoFrame pending={pending}>
+                <Owned>
+                  <SockCount>
+                    You own {balanceSOCKSCLASSIC && `${amountFormatter(balanceSOCKSCLASSIC, 18, 0)}`}
+                  </SockCount>
+                  <p>Redeem SOCKSCLASSIC</p>
+                </Owned>
+                <IncrementToken
+                  initialValue={Number(amountFormatter(balanceSOCKSCLASSIC, 18, 0))}
+                  max={Math.min(Number(amountFormatter(balanceSOCKSCLASSIC, 18, 0)), 50)}
+                />
+              </InfoFrame>
+            </PopupContent>
           </TopFrame>
           <Shim />
           <ButtonFrame
@@ -189,25 +193,27 @@ export default function Redeem({
         <ConfirmedFrame>
           <TopFrame hasPickedAmount={hasPickedAmount}>
             <RedeemControls closeCheckout={closeCheckout} type="confirm" />
-            <InfoFrame hasPickedAmount={hasPickedAmount}>
-              <ImgStyle src={nfc} alt="Logo" hasPickedAmount={hasPickedAmount} />
-              <Owned>
-                <p style={{ fontSize: '18px' }}>{state.count} Unisocks Classic NFT</p>
-                <p style={{ fontSize: '14px', fontWeight: '500' }}>Digital Collectible (10kb)</p>
-                <p
-                  style={{
-                    fontSize: '12px',
-                    fontWeight: '500',
-                    color: '#AEAEAE',
-                    marginTop: '16px',
-                    marginRight: '16px',
-                    wordBreak: 'break-all'
-                  }}
-                >
-                  {account}
-                </p>
-              </Owned>
-            </InfoFrame>
+            <PopupContent>
+              <InfoFrame hasPickedAmount={hasPickedAmount}>
+                <ImgStyle src={nfc} alt="Logo" hasPickedAmount={hasPickedAmount} />
+                <Owned>
+                  <p style={{ fontSize: '18px' }}>{state.count} Unisocks Classic NFT</p>
+                  <p style={{ fontSize: '14px', fontWeight: '500' }}>Digital Collectible (10kb)</p>
+                  <p
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: '500',
+                      color: '#AEAEAE',
+                      marginTop: '16px',
+                      marginRight: '16px',
+                      wordBreak: 'break-all'
+                    }}
+                  >
+                    {account}
+                  </p>
+                </Owned>
+              </InfoFrame>
+            </PopupContent>
           </TopFrame>
           {/* <Back
             onClick={() => {
@@ -258,7 +264,11 @@ export default function Redeem({
           <Shim />
           <Back disabled={!!pending}>
             {pending ? (
-              <EtherscanLink href={link('etherscan', transactionHash, networkId)} target="_blank" rel="noopener noreferrer">
+              <EtherscanLink
+                href={link('etherscan', transactionHash, networkId)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 View on Etherscan.
               </EtherscanLink>
             ) : (
@@ -278,18 +288,20 @@ export default function Redeem({
         <ConfirmedFrame>
           <TopFrame hasPickedAmount={hasPickedAmount}>
             <RedeemControls closeCheckout={closeCheckout} />
-            <ImgStyle src={sent} alt="Logo" hasPickedAmount={hasPickedAmount} hasBurnt={hasBurnt} />
-            <InfoFrame>
-              <Owned>
-                <p>You got socks!</p>
-              </Owned>
-            </InfoFrame>
+            <PopupContent>
+              <ImgStyle src={sent} alt="Logo" hasPickedAmount={hasPickedAmount} hasBurnt={hasBurnt} />
+              <InfoFrame>
+                <Owned>
+                  <p>You got socks!</p>
+                </Owned>
+              </InfoFrame>
+            </PopupContent>
           </TopFrame>
           <CheckoutPrompt>
             Estimated shipping time 2-3 minutes. <br /> Shipping time does not vary by region
           </CheckoutPrompt>
           <CheckoutPrompt>Your shipping details will be available soon.</CheckoutPrompt>
-          <div style={{ margin: '16px 0 16px 16px' }}>
+          <div style={{ margin: '16px 0 0' }}>
             {/* <EtherscanLink href={link('etherscan', transactionHash, networkId)} target="_blank" rel="noopener noreferrer">
               View on Etherscan.
             </EtherscanLink> */}
@@ -325,7 +337,7 @@ const InfoFrame = styled.div`
   align-items: flex-end;
   padding: ${props => (props.hasPickedAmount ? '1rem 0 1rem 0' : ' 0')};
   /* padding: 1rem 0 1rem 0; */
-  margin-top: 12px;
+  margin-top: ${props => (props.hasPickedAmount ? '24px' : '12px')};
   /* margin-bottom: 8px; */
   /* margin-right: ${props => (props.hasPickedAmount ? '8px' : '0px')}; */
 
@@ -360,9 +372,13 @@ const Bonus = styled.div`
 `
 
 const ImgStyle = styled.img`
-  width: ${props => (props.hasPickedAmount ? (props.hasBurnt ? '300px' : '120px') : '300px')};
+  width: ${props => (props.hasPickedAmount ? (props.hasBurnt ? 'auto' : '120px') : 'auto')};
   padding: ${props => (props.hasPickedAmount ? (props.hasBurnt ? '0px' : '0 1rem 0 0') : '2rem 0 2rem 0')};
   box-sizing: border-box;
+
+  display: flex;
+  max-width: 70%;
+  max-height: 50vh;
 `
 const SockCount = styled.span`
   color: #aeaeae;
@@ -377,7 +393,7 @@ const Back = styled.div`
   color: #aeaeae;
   font-weight: 400;
   margin: 0px;
-  margin: -4px 0 16px 0px !important;
+  margin: -4px 0 4px 0px !important;
   font-size: 14px;
   width: 100%;
   display: flex;
@@ -396,7 +412,7 @@ const Back = styled.div`
 const CheckoutPrompt = styled.p`
   font-weight: 500;
   font-size: 14px;
-  margin: 24px 16px 0 16px !important;
+  margin: 24px 0px 0 !important;
   text-align: left;
   color: '#000';
   font-style: italic;
