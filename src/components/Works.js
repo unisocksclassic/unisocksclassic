@@ -35,7 +35,7 @@ export const EtherscanLink = styled.a`
   font-size: 12px;
 `
 export const ScrollableContent = styled.div`
-  height: calc(100vh - 140px);
+  max-height: calc(100vh - 140px);
   overflow: scroll;
   scrollbar-width: none;
 `
@@ -43,7 +43,7 @@ export const ScrollableContent = styled.div`
 export default function Works({ closeCheckout }) {
   return (
     <WorksFrame>
-      <Controls closeCheckout={closeCheckout} theme={'dark'} >
+      <Controls closeCheckout={closeCheckout} theme={'dark'}>
         About
       </Controls>
 
