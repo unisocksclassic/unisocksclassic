@@ -10,8 +10,7 @@ import {
   getEtherBalance,
   getTokenBalance,
   getTokenAllowance,
-  TOKEN_ADDRESSES,
-  REDEEM_ADDRESS
+  getRedeemAddress
 } from '../utils'
 
 export function useBlockEffect(functionToRun) {
@@ -43,25 +42,27 @@ export function useTokenContract(tokenAddress, withSignerIfPossible = true) {
 }
 
 export function useRedeemContract(withSignerIfPossible = true) {
-  const { library, account } = useWeb3Context()
+  const { library, account, networkId } = useWeb3Context()
+
+  const redeemAddress = getRedeemAddress(networkId)
 
   return useMemo(() => {
     try {
-      return getRedeemContract(REDEEM_ADDRESS, library, withSignerIfPossible ? account : undefined)
+      return getRedeemContract(redeemAddress, library, withSignerIfPossible ? account : undefined)
     } catch {
       return null
     }
-  }, [account, library, withSignerIfPossible])
+  }, [account, library, redeemAddress, withSignerIfPossible])
 }
 
 export function useExchangeContract(tokenAddress, withSignerIfPossible = true) {
-  const { library, account } = useWeb3Context()
+  const { library, account, networkId } = useWeb3Context()
 
   const [exchangeAddress, setExchangeAddress] = useState()
   useEffect(() => {
     if (isAddress(tokenAddress)) {
       let stale = false
-      getTokenExchangeAddressFromFactory(tokenAddress, library).then(exchangeAddress => {
+      getTokenExchangeAddressFromFactory(tokenAddress, library, account, networkId).then(exchangeAddress => {
         if (!stale) {
           setExchangeAddress(exchangeAddress)
         }
@@ -71,7 +72,7 @@ export function useExchangeContract(tokenAddress, withSignerIfPossible = true) {
         setExchangeAddress()
       }
     }
-  }, [library, tokenAddress])
+  }, [library, tokenAddress, networkId, account])
 
   return useMemo(() => {
     try {
@@ -121,7 +122,7 @@ export function useAddressBalance(address, tokenAddress) {
 export function useExchangeReserves(tokenAddress) {
   const exchangeContract = useExchangeContract(tokenAddress)
 
-  const reserveETH = useAddressBalance(exchangeContract && exchangeContract.address, TOKEN_ADDRESSES.ETH)
+  const reserveETH = useAddressBalance(exchangeContract && exchangeContract.address, 'ETH')
   const reserveToken = useAddressBalance(exchangeContract && exchangeContract.address, tokenAddress)
 
   return { reserveETH, reserveToken }

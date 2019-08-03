@@ -5,7 +5,7 @@ import { useWeb3Context } from 'web3-react'
 
 import { useAppContext } from '../context'
 import { ConfirmedFrame, Shim, TopFrame, ButtonFrame, Controls, PopupContent } from './Common'
-import { ERROR_CODES, TRADE_TYPES, REDEEM_ADDRESS, TOKEN_ADDRESSES, amountFormatter, link } from '../utils'
+import { ERROR_CODES, TRADE_TYPES, getRedeemAddress, amountFormatter, link } from '../utils'
 
 import IncrementToken from './IncrementToken'
 import test from './Gallery/test.png'
@@ -79,6 +79,9 @@ export default function Redeem({
 }) {
   const { library, account, setConnector, networkId } = useWeb3Context()
   const [state] = useAppContext()
+  const { tokenAddresses } = state
+
+  const redeemAddress = getRedeemAddress(networkId)
 
   const [numberBurned, setNumberBurned] = useState()
   const [validationState, setValidationState] = useState({})
@@ -232,9 +235,9 @@ export default function Redeem({
               pending={pending}
               onClick={() => {
                 unlock({
-                  address: REDEEM_ADDRESS,
+                  address: redeemAddress,
                   amount: ethers.utils.parseUnits(String(state.count), 18),
-                  token: TOKEN_ADDRESSES.SOCKSCLASSIC
+                  token: tokenAddresses.SOCKSCLASSIC
                 }).then(({ hash }) => {
                   setCurrentTransaction(hash, TRADE_TYPES.UNLOCK, undefined)
                 })
