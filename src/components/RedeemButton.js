@@ -42,7 +42,7 @@ export default function RedeemButton({ balanceSOCKSCLASSIC }) {
   return (
     <BuyButtonFrame>
       <ButtonFrame
-        disabled={balanceSOCKSCLASSIC < 0 ? true : false}
+        disabled={!(balanceSOCKSCLASSIC > 0)}
         text={'Sell'}
         type={'secondary'}
         onClick={() => {
