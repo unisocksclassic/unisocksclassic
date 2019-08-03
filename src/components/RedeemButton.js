@@ -5,7 +5,7 @@ import { useWeb3Context } from 'web3-react'
 
 import { ButtonFrame } from './Common'
 import { useAppContext } from '../context'
-import { TRADE_TYPES } from '../utils'
+import { TRADE_TYPES, getRedeemAddress } from '../utils'
 
 const BuyButtonFrame = styled.div`
   margin: 0.5rem 0rem 0.5rem 0rem;
@@ -30,8 +30,10 @@ const Shim = styled.div`
 `
 
 export default function RedeemButton({ balanceSOCKSCLASSIC }) {
-  const [, setState] = useAppContext()
-  const { account } = useWeb3Context()
+  const [state, setState] = useAppContext()
+  const { account, networkId } = useWeb3Context()
+
+  const redeemAddress = getRedeemAddress(networkId)
 
   function handleToggleCheckout(tradeType) {
     setState(state => ({ ...state, visible: !state.visible, tradeType }))
@@ -40,7 +42,7 @@ export default function RedeemButton({ balanceSOCKSCLASSIC }) {
   return (
     <BuyButtonFrame>
       <ButtonFrame
-        disabled={balanceSOCKSCLASSIC > 0 ? false : true}
+        disabled={!(balanceSOCKSCLASSIC > 0)}
         text={'Sell'}
         type={'secondary'}
         onClick={() => {
@@ -52,7 +54,8 @@ export default function RedeemButton({ balanceSOCKSCLASSIC }) {
         disabled={
           account === null ||
           !balanceSOCKSCLASSIC ||
-          balanceSOCKSCLASSIC.lt(ethers.utils.bigNumberify(10).pow(ethers.utils.bigNumberify(18)))
+          balanceSOCKSCLASSIC.lt(ethers.utils.bigNumberify(10).pow(ethers.utils.bigNumberify(18))) ||
+          redeemAddress == '0x0'
         }
         text={'Redeem'}
         type={'secondary'}

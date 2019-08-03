@@ -8,9 +8,23 @@ import REDEEM_ABI from './redeem.json'
 import UncheckedJsonRpcSigner from './signer'
 
 // Mainnet
-// const FACTORY_ADDRESS = '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95'
+const FACTORY_ADDRESS = '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95'
 // Rinkeby
-const FACTORY_ADDRESS = '0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36'
+const FACTORY_ADDRESS_RINKEBY = '0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36'
+
+export const getFactoryAddress = networkId => {
+  switch (networkId) {
+    case 1: {
+      return FACTORY_ADDRESS
+    }
+    case 4: {
+      return FACTORY_ADDRESS_RINKEBY
+    }
+    default: {
+      return FACTORY_ADDRESS
+    }
+  }
+}
 
 export const TOKEN_ADDRESSES = {
   ETH: 'ETH',
@@ -18,10 +32,7 @@ export const TOKEN_ADDRESSES = {
   SOCKSCLASSIC: '0xf7a5a8a95491ec170738434963b649671b563b88',
   ANT: '0x960b236A07cf122663c4303350609A66A7B288C0',
   BAT: '0x0D8775F648430679A709E98d2b0Cb6250d2887EF',
-  // Mainnet
-  // DAI: '0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359',
-  // Rinkeby
-  DAI: '0x2448ee2641d78cc42d7ad76498917359d961a783',
+  DAI: '0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359',
   KNC: '0xdd974D5C2e2928deA5F71b9825b8b646686BD200',
   MKR: '0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2',
   RDN: '0x255Aa6DF07540Cb5d3d297f0D0D4D84cb52bc8e6',
@@ -32,13 +43,48 @@ export const TOKEN_ADDRESSES = {
   ZRX: '0xE41d2489571d322189246DaFA5ebDe1F4699F498'
 }
 
-// Rinkeby
-export const REDEEM_ADDRESS = '0x3c2f192ee7faad7a8818d2611ce4c9a676b77e7f'
+export const TOKEN_ADDRESSES_RINKEBY = {
+  ETH: 'ETH',
+  SOCKSCLASSIC: '0xf7a5a8a95491ec170738434963b649671b563b88',
+  DAI: '0x2448ee2641d78cc42d7ad76498917359d961a783'
+}
 
-export const TOKEN_SYMBOLS = Object.keys(TOKEN_ADDRESSES).reduce((o, k) => {
-  o[k] = k
-  return o
-}, {})
+export const getTokenAddresses = networkId => {
+  switch (networkId) {
+    case 1: {
+      return TOKEN_ADDRESSES
+    }
+    case 4: {
+      return TOKEN_ADDRESSES_RINKEBY
+    }
+    default: {
+      return TOKEN_ADDRESSES
+    }
+  }
+}
+
+export const getTokenSymbols = tokenAddresses =>
+  Object.keys(tokenAddresses).reduce((o, k) => {
+    o[k] = k
+    return o
+  }, {})
+
+// Rinkeby
+export const REDEEM_ADDRESS_RINKEBY = '0x3c2f192ee7faad7a8818d2611ce4c9a676b77e7f'
+
+export const getRedeemAddress = networkId => {
+  switch (networkId) {
+    case 1: {
+      return '0x0' // Not deployed yet
+    }
+    case 4: {
+      return REDEEM_ADDRESS_RINKEBY
+    }
+    default: {
+      return '0x0'
+    }
+  }
+}
 
 export const ERROR_CODES = [
   'INVALID_AMOUNT',
@@ -67,10 +113,8 @@ export function isAddress(value) {
 
 export function link(service, suffix, networkId = 4) {
   let url = `https://${networkId === 4 ? 'rinkeby.' : ''}${service}.io/`
-  if (service === 'etherscan')
-    url += 'tx/'
-  if (service === 'opensea')
-    url += 'accounts/'
+  if (service === 'etherscan') url += 'tx/'
+  if (service === 'opensea') url += 'accounts/'
   url += suffix
 
   return url
@@ -102,8 +146,8 @@ export function getExchangeContract(exchangeAddress, library, account) {
   return getContract(exchangeAddress, EXCHANGE_ABI, library, account)
 }
 
-export async function getTokenExchangeAddressFromFactory(tokenAddress, library, account) {
-  return getContract(FACTORY_ADDRESS, FACTORY_ABI, library, account).getExchange(tokenAddress)
+export async function getTokenExchangeAddressFromFactory(tokenAddress, library, account, networkId = 1) {
+  return getContract(getFactoryAddress(networkId), FACTORY_ABI, library, account).getExchange(tokenAddress)
 }
 
 // get the ether balance of an address

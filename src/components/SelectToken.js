@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TOKEN_SYMBOLS } from '../utils'
+import { useAppContext } from '../context'
 
 import arrow from './Gallery/arrow.svg'
 
@@ -36,9 +36,10 @@ const SelectItem = styled.option`
   padding: 0px 0.5rem 0px 0.5rem;
 `
 
-const options = Object.keys(TOKEN_SYMBOLS)
-  .filter(s => s !== 'SOCKSCLASSIC')
-  .map(s => ({ value: s, label: s }))
+const options = tokenSymbols =>
+  Object.keys(tokenSymbols)
+    .filter(s => s !== 'SOCKSCLASSIC')
+    .map(s => ({ value: s, label: s }))
 
 function renderOptions(token, i, selectedTokenSymbol, prefix) {
   if (selectedTokenSymbol === token.value) {
@@ -57,6 +58,8 @@ function renderOptions(token, i, selectedTokenSymbol, prefix) {
 }
 
 export default function SelectToken({ selectedTokenSymbol, setSelectedTokenSymbol, prefix }) {
+  const [state] = useAppContext()
+  const { tokenSymbols } = state
   return (
     <>
       <SelectMenu
@@ -65,7 +68,7 @@ export default function SelectToken({ selectedTokenSymbol, setSelectedTokenSymbo
         }}
         className="dropdown"
       >
-        {options.map((item, i) => renderOptions(item, i, selectedTokenSymbol, prefix))}
+        {options(tokenSymbols).map((item, i) => renderOptions(item, i, selectedTokenSymbol, prefix))}
       </SelectMenu>
 
       <NoHeight>

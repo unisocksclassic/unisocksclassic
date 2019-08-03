@@ -2,7 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { useWeb3Context } from 'web3-react'
 import { ethers } from 'ethers'
 
-import { TOKEN_SYMBOLS, TOKEN_ADDRESSES, ERROR_CODES, REDEEM_ADDRESS, getTokenContract } from '../../utils'
+import { ERROR_CODES, getRedeemAddress, getTokenContract } from '../../utils'
+import { useAppContext } from '../../context'
 import {
   useTokenContract,
   useRedeemContract,
@@ -78,6 +79,7 @@ function getExchangeRate(inputValue, outputValue, invert = false) {
 }
 
 function calculateAmount(
+  tokenSymbols,
   inputTokenSymbol,
   outputTokenSymbol,
   SOCKSCLASSICAmount,
@@ -87,7 +89,7 @@ function calculateAmount(
   reserveSelectedTokenToken
 ) {
   // eth to token - buy
-  if (inputTokenSymbol === TOKEN_SYMBOLS.ETH && outputTokenSymbol === TOKEN_SYMBOLS.SOCKSCLASSIC) {
+  if (inputTokenSymbol === tokenSymbols.ETH && outputTokenSymbol === tokenSymbols.SOCKSCLASSIC) {
     const amount = calculateEtherTokenInputFromOutput(
       SOCKSCLASSICAmount,
       reserveSOCKSCLASSICETH,
@@ -100,7 +102,7 @@ function calculateAmount(
   }
 
   // token to eth - sell
-  if (inputTokenSymbol === TOKEN_SYMBOLS.SOCKSCLASSIC && outputTokenSymbol === TOKEN_SYMBOLS.ETH) {
+  if (inputTokenSymbol === tokenSymbols.SOCKSCLASSIC && outputTokenSymbol === tokenSymbols.ETH) {
     const amount = calculateEtherTokenOutputFromInput(
       SOCKSCLASSICAmount,
       reserveSOCKSCLASSICToken,
@@ -114,7 +116,7 @@ function calculateAmount(
   }
 
   // token to token - buy or sell
-  const buyingSOCKSCLASSIC = outputTokenSymbol === TOKEN_SYMBOLS.SOCKSCLASSIC
+  const buyingSOCKSCLASSIC = outputTokenSymbol === tokenSymbols.SOCKSCLASSIC
 
   if (buyingSOCKSCLASSIC) {
     // eth needed to buy x socks
@@ -161,51 +163,54 @@ function calculateAmount(
 }
 
 export default function Main() {
-  const { library, account } = useWeb3Context()
+  const { library, account, networkId } = useWeb3Context()
+  const [state] = useAppContext()
+  const { tokenAddresses, tokenSymbols } = state
 
   // selected token
-  const [selectedTokenSymbol, setSelectedTokenSymbol] = useState(TOKEN_SYMBOLS.ETH)
+  const [selectedTokenSymbol, setSelectedTokenSymbol] = useState(tokenSymbols.ETH)
 
   // get exchange contracts
-  const exchangeContractSOCKSCLASSIC = useExchangeContract(TOKEN_ADDRESSES.SOCKSCLASSIC)
-  const exchangeContractSelectedToken = useExchangeContract(TOKEN_ADDRESSES[selectedTokenSymbol])
-  const exchangeContractDAI = useExchangeContract(TOKEN_ADDRESSES.DAI)
+  const exchangeContractSOCKSCLASSIC = useExchangeContract(tokenAddresses.SOCKSCLASSIC)
+  const exchangeContractSelectedToken = useExchangeContract(tokenAddresses[selectedTokenSymbol])
+  const exchangeContractDAI = useExchangeContract(tokenAddresses.DAI)
 
   // get token contracts
-  const tokenContractSOCKSCLASSIC = useTokenContract(TOKEN_ADDRESSES.SOCKSCLASSIC)
-  const tokenContractSelectedToken = useTokenContract(TOKEN_ADDRESSES[selectedTokenSymbol])
+  const tokenContractSOCKSCLASSIC = useTokenContract(tokenAddresses.SOCKSCLASSIC)
+  const tokenContractSelectedToken = useTokenContract(tokenAddresses[selectedTokenSymbol])
 
   const redeemContract = useRedeemContract()
 
   // get balances
-  const balanceETH = useAddressBalance(account, TOKEN_ADDRESSES.ETH)
-  const balanceSOCKSCLASSIC = useAddressBalance(account, TOKEN_ADDRESSES.SOCKSCLASSIC)
-  const balanceSelectedToken = useAddressBalance(account, TOKEN_ADDRESSES[selectedTokenSymbol])
+  const balanceETH = useAddressBalance(account, tokenAddresses.ETH)
+  const balanceSOCKSCLASSIC = useAddressBalance(account, tokenAddresses.SOCKSCLASSIC)
+  const balanceSelectedToken = useAddressBalance(account, tokenAddresses[selectedTokenSymbol])
 
   // get allowances
   const allowanceSOCKSCLASSIC = useAddressAllowance(
     account,
-    TOKEN_ADDRESSES.SOCKSCLASSIC,
+    tokenAddresses.SOCKSCLASSIC,
     exchangeContractSOCKSCLASSIC && exchangeContractSOCKSCLASSIC.address
   )
-  const allowanceRedeemSOCKSCLASSIC = useAddressAllowance(account, TOKEN_ADDRESSES.SOCKSCLASSIC, REDEEM_ADDRESS)
-  const allowanceSelectedToken = useExchangeAllowance(account, TOKEN_ADDRESSES[selectedTokenSymbol])
+  const redeemAddress = getRedeemAddress(networkId)
+  const allowanceRedeemSOCKSCLASSIC = useAddressAllowance(account, tokenAddresses.SOCKSCLASSIC, redeemAddress)
+  const allowanceSelectedToken = useExchangeAllowance(account, tokenAddresses[selectedTokenSymbol])
 
   // get reserves
   const reserveSOCKSCLASSICETH = useAddressBalance(
     exchangeContractSOCKSCLASSIC && exchangeContractSOCKSCLASSIC.address,
-    TOKEN_ADDRESSES.ETH
+    tokenAddresses.ETH
   )
   const reserveSOCKSCLASSICToken = useAddressBalance(
     exchangeContractSOCKSCLASSIC && exchangeContractSOCKSCLASSIC.address,
-    TOKEN_ADDRESSES.SOCKSCLASSIC
+    tokenAddresses.SOCKSCLASSIC
   )
   const { reserveETH: reserveSelectedTokenETH, reserveToken: reserveSelectedTokenToken } = useExchangeReserves(
-    TOKEN_ADDRESSES[selectedTokenSymbol]
+    tokenAddresses[selectedTokenSymbol]
   )
 
-  const reserveDAIETH = useAddressBalance(exchangeContractDAI && exchangeContractDAI.address, TOKEN_ADDRESSES.ETH)
-  const reserveDAIToken = useAddressBalance(exchangeContractDAI && exchangeContractDAI.address, TOKEN_ADDRESSES.DAI)
+  const reserveDAIETH = useAddressBalance(exchangeContractDAI && exchangeContractDAI.address, tokenAddresses.ETH)
+  const reserveDAIToken = useAddressBalance(exchangeContractDAI && exchangeContractDAI.address, tokenAddresses.DAI)
 
   const [USDExchangeRateETH, setUSDExchangeRateETH] = useState()
   const [USDExchangeRateSelectedToken, setUSDExchangeRateSelectedToken] = useState()
@@ -228,7 +233,7 @@ export default function Main() {
     try {
       const exchangeRateDAI = getExchangeRate(reserveDAIETH, reserveDAIToken)
 
-      if (selectedTokenSymbol === TOKEN_SYMBOLS.ETH) {
+      if (selectedTokenSymbol === tokenSymbols.ETH) {
         setUSDExchangeRateETH(exchangeRateDAI)
       } else {
         const exchangeRateSelectedToken = getExchangeRate(reserveSelectedTokenETH, reserveSelectedTokenToken)
@@ -244,7 +249,14 @@ export default function Main() {
       setUSDExchangeRateETH()
       setUSDExchangeRateSelectedToken()
     }
-  }, [reserveDAIETH, reserveDAIToken, reserveSelectedTokenETH, reserveSelectedTokenToken, selectedTokenSymbol])
+  }, [
+    reserveDAIETH,
+    reserveDAIToken,
+    reserveSelectedTokenETH,
+    reserveSelectedTokenToken,
+    selectedTokenSymbol,
+    tokenSymbols.ETH
+  ])
 
   function _dollarize(amount, exchangeRate) {
     return amount.mul(exchangeRate).div(ethers.utils.bigNumberify(10).pow(ethers.utils.bigNumberify(18)))
@@ -253,7 +265,7 @@ export default function Main() {
   function dollarize(amount) {
     return _dollarize(
       amount,
-      selectedTokenSymbol === TOKEN_SYMBOLS.ETH ? USDExchangeRateETH : USDExchangeRateSelectedToken
+      selectedTokenSymbol === tokenSymbols.ETH ? USDExchangeRateETH : USDExchangeRateSelectedToken
     )
   }
 
@@ -311,8 +323,9 @@ export default function Main() {
       let requiredValueInSelectedToken
       try {
         requiredValueInSelectedToken = calculateAmount(
+          tokenSymbols,
           selectedTokenSymbol,
-          TOKEN_SYMBOLS.SOCKSCLASSIC,
+          tokenSymbols.SOCKSCLASSIC,
           parsedValue,
           reserveSOCKSCLASSICETH,
           reserveSOCKSCLASSICToken,
@@ -373,7 +386,8 @@ export default function Main() {
       reserveSOCKSCLASSICToken,
       reserveSelectedTokenETH,
       reserveSelectedTokenToken,
-      selectedTokenSymbol
+      selectedTokenSymbol,
+      tokenSymbols
     ]
   )
 
@@ -384,7 +398,7 @@ export default function Main() {
       .getGasPrice()
       .then(gasPrice => gasPrice.mul(ethers.utils.bigNumberify(150)).div(ethers.utils.bigNumberify(100)))
 
-    if (selectedTokenSymbol === TOKEN_SYMBOLS.ETH) {
+    if (selectedTokenSymbol === tokenSymbols.ETH) {
       const estimatedGasLimit = await exchangeContractSOCKSCLASSIC.estimate.ethToTokenSwapOutput(
         outputValue,
         deadline,
@@ -403,14 +417,14 @@ export default function Main() {
         maximumInputValue,
         ethers.constants.MaxUint256,
         deadline,
-        TOKEN_ADDRESSES.SOCKSCLASSIC
+        tokenAddresses.SOCKSCLASSIC
       )
       return exchangeContractSelectedToken.tokenToTokenSwapOutput(
         outputValue,
         maximumInputValue,
         ethers.constants.MaxUint256,
         deadline,
-        TOKEN_ADDRESSES.SOCKSCLASSIC,
+        tokenAddresses.SOCKSCLASSIC,
         {
           gasLimit: calculateGasMargin(estimatedGasLimit, GAS_MARGIN),
           gasPrice: estimatedGasPrice
@@ -435,7 +449,8 @@ export default function Main() {
       let requiredValueInSelectedToken
       try {
         requiredValueInSelectedToken = calculateAmount(
-          TOKEN_SYMBOLS.SOCKSCLASSIC,
+          tokenSymbols,
+          tokenSymbols.SOCKSCLASSIC,
           selectedTokenSymbol,
           parsedValue,
           reserveSOCKSCLASSICETH,
@@ -495,7 +510,8 @@ export default function Main() {
       reserveSOCKSCLASSICToken,
       reserveSelectedTokenETH,
       reserveSelectedTokenToken,
-      selectedTokenSymbol
+      selectedTokenSymbol,
+      tokenSymbols
     ]
   )
 
@@ -556,7 +572,7 @@ export default function Main() {
       .getGasPrice()
       .then(gasPrice => gasPrice.mul(ethers.utils.bigNumberify(150)).div(ethers.utils.bigNumberify(100)))
 
-    if (selectedTokenSymbol === TOKEN_SYMBOLS.ETH) {
+    if (selectedTokenSymbol === tokenSymbols.ETH) {
       const estimatedGasLimit = await exchangeContractSOCKSCLASSIC.estimate.tokenToEthSwapInput(
         inputValue,
         minimumOutputValue,
@@ -572,14 +588,14 @@ export default function Main() {
         minimumOutputValue,
         ethers.constants.One,
         deadline,
-        TOKEN_ADDRESSES[selectedTokenSymbol]
+        tokenAddresses[selectedTokenSymbol]
       )
       return exchangeContractSOCKSCLASSIC.tokenToTokenSwapInput(
         inputValue,
         minimumOutputValue,
         ethers.constants.One,
         deadline,
-        TOKEN_ADDRESSES[selectedTokenSymbol],
+        tokenAddresses[selectedTokenSymbol],
         {
           gasLimit: calculateGasMargin(estimatedGasLimit, GAS_MARGIN),
           gasPrice: estimatedGasPrice
