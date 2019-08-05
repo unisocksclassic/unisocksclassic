@@ -69,13 +69,16 @@ export const getTokenSymbols = tokenAddresses =>
     return o
   }, {})
 
+// Mainnet
+export const REDEEM_ADDRESS = '0x62513e64EdFB13fbC894Ae0eaaBb150CC7Fdfb5a'
+
 // Rinkeby
 export const REDEEM_ADDRESS_RINKEBY = '0x3c2f192ee7faad7a8818d2611ce4c9a676b77e7f'
 
 export const getRedeemAddress = networkId => {
   switch (networkId) {
     case 1: {
-      return '0x0' // Not deployed yet
+      return REDEEM_ADDRESS // Not deployed yet
     }
     case 4: {
       return REDEEM_ADDRESS_RINKEBY
