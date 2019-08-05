@@ -9,6 +9,7 @@ import {
   getTokenExchangeAddressFromFactory,
   getEtherBalance,
   getTokenBalance,
+  getTokenSupply,
   getTokenAllowance,
   getRedeemAddress
 } from '../utils'
@@ -117,6 +118,42 @@ export function useAddressBalance(address, tokenAddress) {
   useBlockEffect(updateBalance)
 
   return balance
+}
+
+export function useTokenSupply(tokenAddress) {
+  const { library } = useWeb3Context()
+
+  const [tokenSupply, setTokenSupply] = useState()
+
+  const updateTokenSupply = useCallback(() => {
+    if (isAddress(tokenAddress)) {
+      let stale = false
+
+      getTokenSupply(tokenAddress, library)
+        .then(value => {
+          if (!stale) {
+            setTokenSupply(value)
+          }
+        })
+        .catch(() => {
+          if (!stale) {
+            setTokenSupply(null)
+          }
+        })
+      return () => {
+        stale = true
+        setTokenSupply()
+      }
+    }
+  }, [library, tokenAddress])
+
+  useEffect(() => {
+    return updateTokenSupply()
+  }, [updateTokenSupply])
+
+  useBlockEffect(updateTokenSupply)
+
+  return tokenSupply
 }
 
 export function useExchangeReserves(tokenAddress) {

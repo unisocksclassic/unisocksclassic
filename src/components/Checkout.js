@@ -73,6 +73,7 @@ export default function Checkout({
   balanceSOCKSCLASSIC,
   dollarPrice,
   reserveSOCKSCLASSICToken,
+  totalSOCKSCLASSICTokenSupply,
   dollarize,
   currentTransactionHash,
   currentTransactionType,
@@ -163,6 +164,7 @@ export default function Checkout({
             setShowConnect={setShowConnect}
             dollarPrice={dollarPrice}
             reserveSOCKSCLASSICToken={reserveSOCKSCLASSICToken}
+            totalSOCKSCLASSICTokenSupply={totalSOCKSCLASSICTokenSupply}
             pending={pending}
             closeCheckout={closeCheckout}
           />

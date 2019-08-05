@@ -168,6 +168,15 @@ export async function getTokenBalance(tokenAddress, address, library) {
   return getContract(tokenAddress, ERC20_ABI, library).balanceOf(address)
 }
 
+// get the token totalSupply
+export async function getTokenSupply(tokenAddress, library) {
+  if (!isAddress(tokenAddress)) {
+    throw Error(`Invalid 'tokenAddress' parameter '${tokenAddress}'.`)
+  }
+
+  return getContract(tokenAddress, ERC20_ABI, library).totalSupply()
+}
+
 export async function getTokenAllowance(address, tokenAddress, spenderAddress, library) {
   if (!isAddress(address) || !isAddress(tokenAddress) || !isAddress(spenderAddress)) {
     throw Error(

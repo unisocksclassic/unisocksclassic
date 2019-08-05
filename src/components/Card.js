@@ -6,7 +6,7 @@ import { amountFormatter } from '../utils'
 
 import Gallery from './Gallery'
 
-export default function Card({ dollarPrice, reserveSOCKSCLASSICToken }) {
+export default function Card({ dollarPrice, reserveSOCKSCLASSICToken, totalSOCKSCLASSICTokenSupply }) {
   const [showPop, setShowPop] = useState(false)
 
   function handleClickPopover(e) {
@@ -27,12 +27,20 @@ export default function Card({ dollarPrice, reserveSOCKSCLASSICToken }) {
           <span>
             <CurrentPrice>{dollarPrice ? `$${amountFormatter(dollarPrice, 18, 2)} USD` : '$0.00'}</CurrentPrice>
             <SockCount>
-              {reserveSOCKSCLASSICToken ? `${amountFormatter(reserveSOCKSCLASSICToken, 18, 0)}/500 available` : '500/500 available'}
+              {reserveSOCKSCLASSICToken
+                ? `${amountFormatter(reserveSOCKSCLASSICToken, 18, 0)}/${amountFormatter(
+                    totalSOCKSCLASSICTokenSupply,
+                    18,
+                    0
+                  )} available`
+                : '500/500 available'}
             </SockCount>
           </span>
           <Info>
             <Popover show={showPop} onMouseLeave={e => handleClickPopover(e)}>
-              <p style={{ marginTop: '0px' }}>The design of SOCKSCLASSIC will not change when tokens are bought and sold.</p>
+              <p style={{ marginTop: '0px' }}>
+                The design of SOCKSCLASSIC will not change when tokens are bought and sold.
+              </p>
               <a
                 href="https://medium.com/@unisocksclassic/socksclassic-the-new-beacon-of-digital-resistance-2f0567924012"
                 target="_blank"
