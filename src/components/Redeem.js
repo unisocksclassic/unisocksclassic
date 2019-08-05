@@ -200,7 +200,7 @@ export default function Redeem({
                 <ImgStyle src={nfc} alt="Logo" hasPickedAmount={hasPickedAmount} />
                 <Owned>
                   <p style={{ fontSize: '18px' }}>{state.count} Unisocks Classic NFT</p>
-                  <p style={{ fontSize: '14px', fontWeight: '500' }}>Digital Collectible (10kb)</p>
+                  <p style={{ fontSize: '14px', fontWeight: '500' }}>Digital Collectible</p>
                   <p
                     style={{
                       fontSize: '12px',
