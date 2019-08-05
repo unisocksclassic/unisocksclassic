@@ -101,7 +101,8 @@ export default function Body({
   dollarize,
   dollarPrice,
   balanceSOCKSCLASSIC,
-  reserveSOCKSCLASSICToken
+  reserveSOCKSCLASSICToken,
+  totalSOCKSCLASSICTokenSupply
 }) {
   const [currentTransaction, _setCurrentTransaction] = useState({})
   const setCurrentTransaction = useCallback((hash, type, amount) => {
@@ -123,7 +124,11 @@ export default function Body({
         setShowConnect={setShowConnect}
       />
       <Content>
-        <Card dollarPrice={dollarPrice} reserveSOCKSCLASSICToken={reserveSOCKSCLASSICToken} />{' '}
+        <Card
+          dollarPrice={dollarPrice}
+          reserveSOCKSCLASSICToken={reserveSOCKSCLASSICToken}
+          totalSOCKSCLASSICTokenSupply={totalSOCKSCLASSICTokenSupply}
+        />{' '}
         <Info>
           <div style={{ marginBottom: '4px' }}>Buy and sell crypto collectible socks with digital currency.</div>
           <div style={{ marginBottom: '4px' }}>
@@ -170,6 +175,7 @@ export default function Body({
         balanceSOCKSCLASSIC={balanceSOCKSCLASSIC}
         dollarPrice={dollarPrice}
         reserveSOCKSCLASSICToken={reserveSOCKSCLASSICToken}
+        totalSOCKSCLASSICTokenSupply={totalSOCKSCLASSICTokenSupply}
         dollarize={dollarize}
         showConnect={showConnect}
         setShowConnect={setShowConnect}

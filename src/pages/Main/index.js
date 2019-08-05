@@ -9,6 +9,7 @@ import {
   useRedeemContract,
   useExchangeContract,
   useAddressBalance,
+  useTokenSupply,
   useAddressAllowance,
   useExchangeReserves,
   useExchangeAllowance
@@ -205,6 +206,7 @@ export default function Main() {
     exchangeContractSOCKSCLASSIC && exchangeContractSOCKSCLASSIC.address,
     tokenAddresses.SOCKSCLASSIC
   )
+  const totalSOCKSCLASSICTokenSupply = useTokenSupply(tokenAddresses.SOCKSCLASSIC)
   const { reserveETH: reserveSelectedTokenETH, reserveToken: reserveSelectedTokenToken } = useExchangeReserves(
     tokenAddresses[selectedTokenSymbol]
   )
@@ -633,6 +635,7 @@ export default function Main() {
       dollarPrice={dollarPrice}
       balanceSOCKSCLASSIC={balanceSOCKSCLASSIC}
       reserveSOCKSCLASSICToken={reserveSOCKSCLASSICToken}
+      totalSOCKSCLASSICTokenSupply={totalSOCKSCLASSICTokenSupply}
     />
   )
 }

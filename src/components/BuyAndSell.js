@@ -68,6 +68,7 @@ export default function BuyAndSell({
   dollarPrice,
   pending,
   reserveSOCKSCLASSICToken,
+  totalSOCKSCLASSICTokenSupply,
   sell,
   dollarize,
   setCurrentTransaction,
@@ -199,9 +200,7 @@ export default function BuyAndSell({
   return (
     <ConfirmedFrame>
       <TopFrame>
-        <Controls closeCheckout={closeCheckout}>
-          {buying ? "Buy" : "Sell"}
-        </Controls>
+        <Controls closeCheckout={closeCheckout}>{buying ? 'Buy' : 'Sell'}</Controls>
         <PopupContent>
           <ImgStyle src={test} alt="Logo" />
           <InfoFrame pending={pending}>
@@ -209,7 +208,12 @@ export default function BuyAndSell({
               {/* {dollarPrice && `$${amountFormatter(dollarPrice, 18, 2)} USD`} */}
               <USDPrice>{renderFormData()}</USDPrice>
               <SockCount>
-                {reserveSOCKSCLASSICToken && `${amountFormatter(reserveSOCKSCLASSICToken, 18, 0)}/500 available`}
+                {reserveSOCKSCLASSICToken &&
+                  `${amountFormatter(reserveSOCKSCLASSICToken, 18, 0)}/${amountFormatter(
+                    totalSOCKSCLASSICTokenSupply,
+                    18,
+                    0
+                  )} available`}
               </SockCount>
             </CurrentPrice>
             <IncrementToken />
